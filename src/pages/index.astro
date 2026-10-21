@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const hidden = ['about', 'contact', 'consulting'];
+const projects = (await getCollection('pages'))
+  .filter((p) => !p.data.draft && !hidden.includes(p.id))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<Base title="Portfolio">
+  <h1>Karen Utrera</h1>
+  <p>Selected work</p>
+  <ul class="grid">
+    {projects.map((p) => (
+      <li><a href={`/${p.id}/`}>{p.data.title}</a></li>
+    ))}
+  </ul>
+</Base>

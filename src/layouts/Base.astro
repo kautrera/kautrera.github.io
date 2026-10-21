@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+const { title } = Astro.props;
+const nav = ['about', 'consulting', 'contact'];
+const pages = await getCollection('pages');
+const navPages = nav
+  .map((slug) => pages.find((p) => p.id === slug))
+  .filter(Boolean);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} · Karen Utrera</title>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/">Karen Utrera</a>
+      <nav>
+        {navPages.map((p) => <a href={`/${p.id}/`}>{p.data.title}</a>)}
+      </nav>
+    </header>
+    <main><slot /></main>
+    <style is:global>
+      :root { --fg: #1a1a1a; --muted: #666; --bg: #fff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
+      header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; border-bottom: 1px solid #eee; }
+      .brand { font-weight: 700; color: inherit; text-decoration: none; }
+      nav a { margin-left: 1.5rem; color: var(--muted); text-decoration: none; }
+      nav a:hover { color: var(--fg); }
+      main { max-width: 860px; margin: 0 auto; padding: 2rem; }
+      main img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; }
+      .grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+      .grid a { display: block; padding: 1.25rem; border: 1px solid #eee; border-radius: 8px; color: inherit; text-decoration: none; }
+      .grid a:hover { border-color: #999; }
+    </style>
+  </body>
+</html>
