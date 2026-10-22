@@ -10,6 +10,7 @@
     "fetch-images": "node scripts/download-images.mjs"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "unist-util-visit": "^5.1.0"
   }
 }

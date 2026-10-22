@@ -2,17 +2,195 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const hidden = ['about', 'contact', 'consulting'];
+// Email is shipped base64-encoded and assembled in the browser, so scrapers reading raw HTML never see it.
+const emailToken = Buffer.from('karen.utera@gmail.com').toString('base64');
 const projects = (await getCollection('pages'))
   .filter((p) => !p.data.draft && !hidden.includes(p.id))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// The Squarespace import left near-duplicate pages; keep the newest per title.
+const seen = new Set();
+// Where to anchor the cover crop per project (CSS object-position).
+const focus = { 'roadster-1': 'right center' };
+
+// Freelance banners from the old Squarespace gallery. Titles are guessed from the file names, edit freely.
+const cover = { clippit: '/images/664169-banner3-clippit.jpg' };
+const freelance = [
+  ['Ello', '5dbae5-banner3-ello.jpg'],
+  ['Photobucket', '4713ce-1-pb.png'],
+  ['Blue Coat', 'a8ddd9-banner1-bc.jpg'],
+].map(([title, file]) => ({ title, year: 2019, image: `/images/${file}` }));
+
+const wall = projects
+  .filter((p) => !seen.has(p.data.title) && seen.add(p.data.title))
+  .map((p) => ({
+    id: p.id,
+    title: p.data.title,
+    year: p.data.date.getFullYear(),
+    focus: focus[p.id],
+    // Animated GIFs get a static `-still.png` next to them for the wall.
+    image: cover[p.id] ?? p.body?.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/)?.[1]?.replace(/\.gif$/, '-still.png'),
+  }))
+  .concat(freelance);
+
+// Tiles listed here come first, in this order; the rest keep their date order.
+const order = ['roadster-1', 'b2b-commerce'];
+const rank = (t) => (order.includes(t.id) ? order.indexOf(t.id) : order.length);
+wall.sort((a, b) => rank(a) - rank(b));
+
+// Current projects, placeholders until case studies exist. Add `image` and `id` to link one.
+const current = [
+  { title: 'Custom Apps', image: '/images/custom-apps.webp' },
+  { title: 'BM UX Studio', image: '/images/bm-ux-studio.png' },
+  'Commerce D2C',
+  { title: 'Agentic Commerce App', image: '/images/agentic-commerce-app.webp' },
+  { title: 'Commerce Design System', image: '/images/commerce-design-system.png' },
+  'Page Designer',
+  'Visual Merchandising',
+  'Catalog Enrichment',
+].map((c, i) => ({ ...(typeof c === 'string' ? { title: c } : c), tone: i % 4 }));
+
+const tiles = [];
+for (let i = 0; i < Math.max(current.length, wall.length); i++) {
+  if (current[i]) tiles.push(current[i]);
+  if (wall[i]) tiles.push(wall[i]);
+}
+
+// Swap Agentic Commerce App into the B2B Commerce slot.
+const a = tiles.findIndex((t) => t.title === 'Agentic Commerce App');
+const b = tiles.findIndex((t) => t.id === 'b2b-commerce');
+if (a > -1 && b > -1) [tiles[a], tiles[b]] = [tiles[b], tiles[a]];
+
+// Swap TrueCar and Commerce Design System.
+const c = tiles.findIndex((t) => t.title === 'TrueCar');
+const d = tiles.findIndex((t) => t.title === 'Commerce Design System');
+if (c > -1 && d > -1) [tiles[c], tiles[d]] = [tiles[d], tiles[c]];
+
+// Swap Visual Merchandising and Clippit.
+const e = tiles.findIndex((t) => t.title === 'Visual Merchandising');
+const f = tiles.findIndex((t) => t.id === 'clippit');
+if (e > -1 && f > -1) [tiles[e], tiles[f]] = [tiles[f], tiles[e]];
+
+// Swap Catalog Enrichment and Ello.
+const g = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
+const h = tiles.findIndex((t) => t.title === 'Ello');
+if (g > -1 && h > -1) [tiles[g], tiles[h]] = [tiles[h], tiles[g]];
+
+// Swap Catalog Enrichment and B2B Commerce.
+const i1 = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
+const j1 = tiles.findIndex((t) => t.id === 'b2b-commerce');
+if (i1 > -1 && j1 > -1) [tiles[i1], tiles[j1]] = [tiles[j1], tiles[i1]];
+
+// Placeholder copy, edit freely.
+const audiences = [
+  { id: 'anyone', label: 'For anyone', text: 'Hello there, I’m Karen, a product designer who cares about creating tools people enjoy using.' },
+  { id: 'recruiters', label: 'Recruiters', text: 'I’m a Principal Product Designer at Salesforce, leading UX for Commerce Cloud. Open to conversations about staff and principal design roles.' },
+  { id: 'directors', label: 'Design Directors', text: 'I design complex, system-level tools, then prototype them in code so the handoff to engineering is something you can click.' },
+  { id: 'pms', label: 'Product Managers', text: 'I turn fuzzy asks into clear patterns, write the acceptance criteria with you, and keep the user in the room.' },
+  { id: 'engineers', label: 'Engineers', text: 'I hand you working prototypes, not static mockups. Expect real states, real tokens, and fewer surprises at review.' },
+];
 ---
 <Base title="Portfolio">
-  <h1>Karen Utrera</h1>
-  <p>Selected work</p>
-  <ul class="grid">
-    {projects.map((p) => (
-      <li><a href={`/${p.id}/`}>{p.data.title}</a></li>
+  <section id="intro">
+  <div class="audience" role="tablist" aria-label="Read this site as">
+    {audiences.map((a, i) => (
+      <button type="button" role="tab" data-id={a.id} aria-selected={i === 0} class:list={[{ on: i === 0 }]}>{a.label}</button>
     ))}
-  </ul>
+  </div>
+  <h1 id="hero">{audiences[0].text}</h1>
+  </section>
+
+  <section id="work">
+    <ul class="wall">
+      {tiles.map((t) => {
+        const inner = t.image
+          ? <img src={base + t.image} alt={t.title} loading="lazy" style={t.focus ? `object-position: ${t.focus}` : undefined} />
+          : <span class="blank">{t.title}</span>;
+        const info = (
+          <span class="info"><span class="name">{t.title}</span><span class="year">{t.year ?? 'Current'}</span></span>
+        );
+        return (
+          <li class={`tone-${t.tone ?? 'x'}`}>
+            {t.id
+              ? <a href={`${base}/${t.id}/`} aria-label={t.title}>{inner}{info}</a>
+              : <div class="tile">{inner}{info}</div>}
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>I’m a Principal Product Designer at Salesforce, leading UX for Commerce Cloud. I design the tools merchants use to build their storefronts and manage complex commerce operations.</p>
+    <p>I like turning complex, system-level problems into clear patterns, then prototyping them in code so teams can click through the idea before it ships.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Say hello at <a href="#contact" id="email" data-token={emailToken}>my email (needs JavaScript)</a>.</p>
+  </section>
+
+  <script is:inline>
+    const mail = document.getElementById('email');
+    const address = atob(mail.dataset.token);
+    mail.href = 'mailto:' + address;
+    mail.textContent = address;
+  </script>
+
+  <script is:inline define:vars={{ audiences }}>
+    const hero = document.getElementById('hero');
+    const tabs = document.querySelectorAll('.audience button');
+    const select = (id) => {
+      const a = audiences.find((x) => x.id === id);
+      if (!a) return;
+      hero.textContent = a.text;
+      tabs.forEach((t) => {
+        const on = t.dataset.id === id;
+        t.classList.toggle('on', on);
+        t.setAttribute('aria-selected', on);
+      });
+      localStorage.setItem('audience', id);
+    };
+    tabs.forEach((t) => t.addEventListener('click', () => select(t.dataset.id)));
+    select(localStorage.getItem('audience') || 'anyone');
+  </script>
+
+  <style>
+    .audience { display: flex; flex-wrap: wrap; gap: 0.25rem 2rem; margin: 0 0 1rem; }
+    .audience button {
+      all: unset; cursor: pointer; color: var(--muted); transition: color 0.15s;
+    }
+    .audience button:hover, .audience button.on { color: var(--fg); }
+    .audience button:focus-visible { outline: 2px solid var(--fg); outline-offset: 4px; }
+    .wall { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+    .wall li { position: relative; max-width: none; aspect-ratio: 4 / 3; overflow: hidden; background: var(--chip); transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s; }
+    .wall li:hover, .wall li:focus-within { transform: scale(1.12); z-index: 2; box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35); }
+    .wall a, .wall .tile { display: grid; place-items: center; width: 100%; height: 100%; color: var(--fg); text-decoration: none; }
+    .wall img { width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; }
+    .info {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem;
+      padding: 1.5rem; text-align: center; color: #fff; background: rgba(0, 0, 0, 0.62); opacity: 0; transition: opacity 0.3s;
+    }
+    .wall li:hover .info, .wall li:focus-within .info { opacity: 1; }
+    .info .name { font-size: clamp(1.1rem, 1.9vw, 1.75rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+    .info .year { opacity: 0.7; }
+    .wall li:hover .blank, .wall li:focus-within .blank { opacity: 0; }
+    .blank { transition: opacity 0.2s; padding: 1.5rem; text-align: center; font-size: clamp(1.1rem, 1.9vw, 1.75rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+    .wall li.tone-0 { background: #e9dcd6; color: #000; }
+    .wall li.tone-1 { background: #cfd6d9; color: #000; }
+    .wall li.tone-2 { background: #1a1a1a; color: #fff; }
+    .wall li.tone-3 { background: #dfe4d2; color: #000; }
+    .wall li.tone-0 .blank, .wall li.tone-1 .blank, .wall li.tone-3 .blank { color: #000; }
+    .wall li.tone-2 .blank { color: #fff; }
+    @media (max-width: 1100px) { .wall { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .wall { grid-template-columns: 1fr; } }
+    #intro { min-height: 62vh; }
+    #work { margin-bottom: 10rem; }
+    #about, #contact { margin-bottom: 8rem; }
+    #about h2, #contact h2 { margin-top: 0; }
+    #about p { font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.35; letter-spacing: -0.02em; max-width: 46rem; }
+  </style>
 </Base>
