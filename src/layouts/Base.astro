@@ -74,6 +74,18 @@ const sections = [
       }
       :root[data-theme='dark'] { --fg: #fff; --muted: #777; --bg: #0b0b0b; --chip: #1c1c1c; --rule: #262626; }
 
+      /* Cross-page transition; fixed chrome keeps its own layer so only the content animates. */
+      @view-transition { navigation: auto; }
+      .mark { view-transition-name: mark; }
+      nav { view-transition-name: nav; }
+      .theme { view-transition-name: theme; }
+      main { view-transition-name: page; }
+      ::view-transition-old(page) { animation: 0.25s ease both fade-out; }
+      ::view-transition-new(page) { animation: 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.1s both fade-up; }
+      @keyframes fade-out { to { opacity: 0; transform: translateY(-0.75rem); } }
+      @keyframes fade-up { from { opacity: 0; transform: translateY(1.5rem); } }
+      @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
+
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
       section[id] { scroll-margin-top: 6rem; }
