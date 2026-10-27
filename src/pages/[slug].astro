@@ -2,6 +2,12 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import RoadsterCase from '../components/RoadsterCase.astro';
+import { readFileSync, existsSync } from 'node:fs';
+
+// Protected pages: private sources exist locally only (gitignored). CI renders from the committed ciphertext.
+const privateCases = import.meta.glob('../../private/*/CommerceCase.astro', { eager: true }) as Record<string, any>;
+const privateMeta = import.meta.glob('../../private/*/meta.json', { eager: true, import: 'default' }) as Record<string, any>;
+const privateAssets = import.meta.glob('../../private/*/*.{webp,mp4}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft);
@@ -11,24 +17,38 @@ export async function getStaticPaths() {
 const { page } = Astro.props;
 const { Content } = await render(page);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const { title, date, subtitle, role, tools } = page.data;
+const { title, date, role, tools } = page.data;
 const body = page.body ?? '';
+const gated = !!page.data.protected;
+const dir = `../../private/${page.id}`;
+const Private = privateCases[`${dir}/CommerceCase.astro`]?.default;
+const meta = privateMeta[`${dir}/meta.json`];
+const sealedFile = `${process.cwd()}/sealed/${page.id}.json`;
+const sealed = gated && !Private && existsSync(sealedFile) ? readFileSync(sealedFile, 'utf8') : '';
+const subtitle = meta?.subtitle ?? page.data.subtitle;
 
 // The ### right after the title in the markdown doubles as the About text when none is set in front matter.
 const lead = body.match(/^# .*\n+### (.+)$/m)?.[1]?.replace(/\*+/g, '');
-const about = page.data.about ?? (lead ? [lead] : []);
+const about = meta?.about ?? page.data.about ?? (lead ? [lead] : []);
 // Gallery: front matter list, else the first image in the body. Its in-body copies are hidden below.
 const first = body.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/)?.[1];
-const gallery = page.data.gallery ?? (first ? [first] : []);
-const Custom = page.id === 'roadster-1' ? RoadsterCase : null;
-const facts = page.data.facts;
-const hasCase = !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
-const hideGallery = gallery.map((g) => `.case .prose img[src="${base}${g}"]`).join(',');
+const gallerySrc = meta?.gallery ?? page.data.gallery ?? (first ? [first] : []);
+// Items are a path or { src, caption }; private files resolve to built asset URLs.
+const gallery = gallerySrc.map((g: any) => {
+  const item = typeof g === 'string' ? { src: g } : g;
+  return { ...item, url: meta ? privateAssets[`${dir}/${item.src}`] : base + item.src };
+});
+const Custom = page.id === 'roadster-1' ? RoadsterCase : Private ?? null;
+const facts = meta?.facts ?? page.data.facts;
+const hasCase = gated || !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
+const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="${g.url}"]`).join(',');
 ---
 <Base title={title}>
   <article class="case">
     <a class="back" href={`${base}/#work`}>&larr; Work</a>
-    <p class="display" aria-hidden="true">{`${title} `.repeat(4)}</p>
+    <p class="display" aria-hidden="true"><span>{`${title} `.repeat(6)}</span></p>
+    <div id="gate-content">
+    {Private && <Fragment set:html={'<!--gate:start-->'} />}
     <div class="split">
       <aside class="side">
         <header>
@@ -57,12 +77,84 @@ const hideGallery = gallery.map((g) => `.case .prose img[src="${base}${g}"]`).jo
         {hasCase && <a class="pill" href="#case-study">View Case Study</a>}
       </aside>
       <div class="gallery">
-        {gallery.map((src) => <img src={base + src} alt={title} />)}
+        {gallery.map((g: any) => g.caption
+          ? <figure><img src={g.url} alt={g.caption} /><figcaption>{g.caption}</figcaption></figure>
+          : <img src={g.url} alt={title} />)}
       </div>
     </div>
-    {hasCase && <section id="case-study" class={Custom ? 'custom' : 'prose'}>{Custom ? <Custom /> : <Content />}</section>}
+    {hasCase && Custom && <section id="case-study" class="custom"><Custom /></section>}
+    {hasCase && !Custom && !gated && <section id="case-study" class="prose"><Content /></section>}
+    {Private && <Fragment set:html={'<!--gate:end-->'} />}
+    </div>
+    {gated && (
+      <form id="gate" hidden>
+        <label for="passcode">This case study is protected.</label>
+        <p class="hint">Enter the passcode to view it.</p>
+        <div class="row">
+          <input id="passcode" type="password" autocomplete="current-password" required />
+          <button type="submit">View</button>
+        </div>
+        <p class="err" role="alert" hidden>That passcode didn’t work.</p>
+      </form>
+      <script type="application/json" id="gate-data" set:html={sealed} />
+    )}
   </article>
+  <style is:global>html { overflow-x: clip; }</style>
   {hideGallery && <style is:global set:html={`${hideGallery}{display:none}`} />}
+
+  {gated && <script is:inline>
+    // Decrypts the sealed case study in the browser (PBKDF2 + AES-GCM) and swaps it in.
+    (async () => {
+      const raw = document.getElementById('gate-data')?.textContent.trim();
+      const form = document.getElementById('gate');
+      if (!raw || !form) return;
+      const data = JSON.parse(raw);
+      const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+      const err = form.querySelector('.err');
+      const open = async (pass) => {
+        try {
+          const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+          const key = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt: b64(data.salt), iterations: data.iter, hash: 'SHA-256' },
+            base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+          const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(data.iv) }, key, b64(data.ct));
+          const host = document.getElementById('gate-content');
+          host.innerHTML = new TextDecoder().decode(plain);
+          // Scripts set via innerHTML don't run; swap in fresh copies so the page's own scripts start.
+          host.querySelectorAll('script').forEach((old) => {
+            const fresh = document.createElement('script');
+            for (const a of old.attributes) fresh.setAttribute(a.name, a.value);
+            fresh.textContent = old.textContent;
+            old.replaceWith(fresh);
+          });
+          form.remove();
+          sessionStorage.setItem('gate:' + location.pathname, pass);
+          document.dispatchEvent(new Event('gate:open'));
+          return true;
+        } catch { return false; }
+      };
+      const saved = sessionStorage.getItem('gate:' + location.pathname);
+      if (saved && (await open(saved))) return;
+      form.hidden = false;
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        err.hidden = true;
+        const btn = form.querySelector('button');
+        btn.disabled = true;
+        if (!(await open(form.passcode.value))) { err.hidden = false; btn.disabled = false; form.passcode.select(); }
+      });
+    })();
+  </script>}
+
+  <script is:inline>
+    // The big title drifts left as the page scrolls down.
+    const drift = document.querySelector('.display span');
+    if (drift && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const move = () => { drift.style.transform = `translateX(${-Math.min(scrollY, 1400)}px)`; };
+      addEventListener('scroll', move, { passive: true });
+      move();
+    }
+  </script>
 
   <style>
     .case { padding-top: 2rem; }
@@ -73,9 +165,15 @@ const hideGallery = gallery.map((g) => `.case .prose img[src="${base}${g}"]`).jo
       margin: 3rem 0 4rem; font-size: clamp(3.5rem, 13vw, 11rem); line-height: 0.9; letter-spacing: -0.05em; font-weight: 500;
       color: var(--muted); max-width: none; white-space: nowrap; overflow: hidden;
     }
+    .display span { display: inline-block; }
+    .display span { will-change: transform; }
+    /* Gallery runs out to the right edge of the page. */
+    @media (min-width: 1000px) {
+      .gallery, .display { margin-right: calc((min(1200px, 100vw - 26rem) - 100vw) / 2); }
+    }
     /* Details stay put on the left while the gallery scrolls on the right. */
     .split { display: grid; grid-template-columns: 4fr 8fr; gap: 3rem; align-items: start; }
-    .side { position: sticky; top: 2rem; display: flex; flex-direction: column; gap: 2rem; }
+    .side { position: sticky; top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
     .side h1 { font-size: clamp(1.75rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; margin: 0 0 0.75rem; }
     .subtitle { margin: 0; color: var(--muted); max-width: none; }
     .label { margin: 0 0 0.5rem; font: inherit; font-size: 0.875rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
@@ -93,8 +191,19 @@ const hideGallery = gallery.map((g) => `.case .prose img[src="${base}${g}"]`).jo
     }
     .pill:hover, .pill:focus-visible { border-color: var(--fg); }
 
-    .gallery { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding-bottom: 70vh; }
-    .gallery img { width: 100%; margin: 0; border-radius: 0; }
+    .gallery { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .gallery img { width: 100%; height: auto; margin: 0; border-radius: 0; }
+    .gallery figure { margin: 0; }
+    .gallery figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+    #gate { max-width: 26rem; margin: 6rem 0 8rem; }
+    #gate label { display: block; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
+    #gate .hint { margin: 0.5rem 0 1.5rem; color: var(--muted); }
+    #gate .row { display: flex; gap: 0.75rem; }
+    #gate input { flex: 1; min-width: 0; height: 2.9rem; padding: 0 1rem; border: 2px solid var(--muted); border-radius: 28px; background: transparent; color: var(--fg); font: inherit; }
+    #gate input:focus { outline: none; border-color: var(--fg); }
+    #gate button { height: 2.9rem; padding: 0 1.5rem; border: 2px solid var(--muted); border-radius: 28px; background: transparent; color: var(--fg); font: inherit; font-weight: 500; cursor: pointer; }
+    #gate button:hover:not(:disabled), #gate button:focus-visible { border-color: var(--fg); }
+    #gate .err { margin: 0.75rem 0 0; color: #d33; }
 
     /* Full case study below the overview. */
     .prose { margin-top: 8rem; padding-top: 3rem; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }

@@ -7,6 +7,7 @@ const pages = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     draft: z.boolean().default(false),
+    protected: z.boolean().optional(),
     subtitle: z.string().optional(),
     about: z.array(z.string()).optional(),
     role: z.string().optional(),
