@@ -1,0 +1,291 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (name: string) => `${base}/images/roadster-${name}.webp`;
+
+const before = [
+  'Confirm ZIP', 'Contact', 'Create Password', 'Steps Overview', 'Confirm Deal', 'Trade-In',
+  'Credit Application', 'Service & Protection', 'Agent Confirmation', 'Final Review', 'Pickup / Delivery', 'Confirmation',
+];
+const after = ['Personal Information', 'Forms & Documents', 'Reservation / Deposit', 'Confirmation'];
+const principles = [
+  ['01', 'Simplify', 'Reduce upfront steps and unnecessary friction.'],
+  ['02', 'Make It Flexible', 'Let customers reserve a vehicle and complete time-consuming tasks later.'],
+  ['03', 'Empower Agents', 'Allow dealership agents to guide customers through the same digital journey.'],
+];
+const screens = [
+  ['checkout-personal-info', '01', 'Personal Information', 'A streamlined way to get started.'],
+  ['checkout-credit-trade-id', '02', 'Credit, Trade & ID', 'Additional requirements without unnecessary friction.'],
+  ['checkout-place-order', '03', 'Place Your Order', 'A clear path to reserving the vehicle.'],
+];
+const outcomes = [
+  ['Simpler Checkout', 'Reduced the core purchasing journey from 12 steps to 4 stages.'],
+  ['Greater Flexibility', 'Customers could reserve a vehicle and complete outstanding tasks later.'],
+  ['Connected Workflows', 'Consumers and dealership agents could work through the same digital purchasing process.'],
+];
+---
+<div class="rc">
+  <!-- 02 The problem -->
+  <section class="sec">
+    <p class="eyebrow">The Challenge</p>
+    <h2>Buying a Car Online Wasn’t Really Online</h2>
+    <div class="problem">
+      <div class="copy">
+        <p>Roadster already let customers shop for cars online, but completing a purchase was another story.</p>
+        <p>The checkout forced everyone through the same lengthy process, regardless of where they were in their buying journey.</p>
+        <p>When customers needed something different, dealership agents would take them out of the online experience to finish the transaction.</p>
+        <p>The result was low engagement and conversion.</p>
+      </div>
+      <figure class="shot"><img src={img('checkout-before')} alt="The original Roadster checkout" loading="lazy" /></figure>
+      <div class="metrics">
+        <div><span class="big">~2%</span><span class="cap">Entered the buying flow</span></div>
+        <div><span class="big">~0.4%</span><span class="cap">Submitted a purchase</span></div>
+        <p class="note">Baseline conversion funnel, March–April 2020.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 The opportunity -->
+  <section class="sec">
+    <p class="eyebrow">The Opportunity</p>
+    <h2>What If Buying a Car Worked More Like Shopping Online?</h2>
+    <div class="copy wide">
+      <p>We looked at experiences from Amazon, Airbnb, Nike, and Tesla.</p>
+      <p>They made complex transactions feel simple, intuitive, and familiar.</p>
+      <p>But cars aren’t sneakers.</p>
+      <p>Buying a vehicle involves financing, trade-ins, legal documents, and often a salesperson.</p>
+      <p>We couldn’t eliminate that complexity, but we could rethink how and when customers experienced it.</p>
+    </div>
+    <ol class="principles">
+      {principles.map(([n, t, d]) => (
+        <li>
+          <span class="num">{n}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 04 The breakthrough -->
+  <section class="sec">
+    <p class="eyebrow">Rethinking the Flow</p>
+    <h2>From 12 Steps to 4</h2>
+    <div class="copy wide">
+      <p>The original checkout tried to complete the entire car-buying process in one rigid sequence.</p>
+      <p>We challenged that assumption.</p>
+      <p>What if customers could commit to a purchase first and complete the administrative work afterward?</p>
+      <p>Instead of treating everything as checkout, we separated placing an order from completing the transaction.</p>
+      <p>This became the foundation of the new experience.</p>
+    </div>
+    <div class="flow">
+      <div class="before">
+        <p class="tag">Before · 12 steps</p>
+        <ol>
+          {before.map((s, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{s}</li>)}
+        </ol>
+      </div>
+      <div class="after">
+        <p class="tag">After · 4 stages</p>
+        <ol>
+          {after.map((s, i) => <li><span>{i + 1}</span>{s}</li>)}
+        </ol>
+      </div>
+      <div class="order">
+        <p class="tag">My Order</p>
+        <p class="order-line">Complete outstanding tasks after placing an order.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 The new checkout -->
+  <section class="sec">
+    <p class="eyebrow">The Solution</p>
+    <h2>Less Friction. More Flexibility.</h2>
+    <div class="copy wide">
+      <p>We redesigned checkout around the information customers actually needed to provide upfront.</p>
+      <p>Instead of forcing every customer through financing, trade-ins, and additional paperwork, the new flow made time-consuming tasks optional.</p>
+      <p>Customers could review their purchase, reserve a vehicle, and continue at their own pace.</p>
+    </div>
+    <div class="scroller">
+      <div class="screens">
+        {screens.map(([f, n, t, c]) => (
+          <figure>
+            <img src={img(f)} alt={t} loading="lazy" />
+            <figcaption><span class="num">{n}</span><strong>{t}</strong>{c}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 My Order -->
+  <section class="sec">
+    <p class="eyebrow">Beyond Checkout</p>
+    <h2>Checkout Was Just the Beginning</h2>
+    <div class="copy wide">
+      <p>One of the biggest changes was recognizing that the purchase didn’t need to end at checkout.</p>
+      <p>We introduced My Order, a central place where customers could manage everything required to complete their purchase.</p>
+      <p>Instead of handling the process through disconnected emails, phone calls, and paperwork, customers could return whenever they were ready.</p>
+    </div>
+    <figure class="frame"><img src={img('my-order')} alt="My Order dashboard" loading="lazy" /></figure>
+    <h3 class="sub">Everything in one place.</h3>
+    <div class="copy wide">
+      <p>Customers could complete credit applications, upload documents, review deal changes, and communicate with their dealership. The process became something customers could manage on their own schedule.</p>
+    </div>
+    <div class="pair">
+      <figure>
+        <img src={img('my-order-financing')} alt="Complete Financing" loading="lazy" />
+        <figcaption><strong>Complete Financing</strong>Submit credit information directly from My Order.</figcaption>
+      </figure>
+      <figure>
+        <img src={img('my-order-upload')} alt="Upload Documents" loading="lazy" />
+        <figcaption><strong>Upload Documents</strong>Provide required documents without leaving the experience.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 07 The connected experience -->
+  <section class="sec">
+    <p class="eyebrow">Designing for Both Sides</p>
+    <h2>Two Experiences. One Connected Journey.</h2>
+    <div class="copy wide">
+      <p>Simplifying the consumer experience was only half the challenge.</p>
+      <p>Dealership agents still needed to manage transactions, adjust deals, and guide customers through the purchasing process.</p>
+      <p>We redesigned the dealership experience alongside the consumer journey, giving agents better visibility into customer activity, outstanding tasks, and order status.</p>
+      <p>Both sides could now work through the same purchase without relying on disconnected processes.</p>
+    </div>
+    <div class="pair">
+      <figure>
+        <span class="user">Consumer experience</span>
+        <img src={img('my-order')} alt="Consumer My Order" loading="lazy" />
+        <figcaption>A single place to manage the purchase and complete outstanding tasks.</figcaption>
+      </figure>
+      <figure>
+        <span class="user">Dealership experience</span>
+        <img src={img('dealer-customer')} alt="Dealership customer view" loading="lazy" />
+        <figcaption>A connected view of customer activity, order status, and next steps.</figcaption>
+      </figure>
+    </div>
+    <figure class="support">
+      <img src={img('dealer-edit-order')} alt="Edit Order" loading="lazy" />
+      <figcaption>Agents could update deal details while keeping the purchase within the digital workflow.</figcaption>
+    </figure>
+  </section>
+
+  <!-- 08 The impact -->
+  <section class="sec">
+    <p class="eyebrow">The Outcome</p>
+    <h2>A Better Foundation for Digital Car Buying</h2>
+    <div class="copy wide">
+      <p>The redesign fundamentally changed how customers moved through the buying process.</p>
+      <p>Instead of requiring every task upfront, we created a flexible journey that let customers place an order and complete the remaining requirements on their terms.</p>
+      <p>For dealerships, the connected experience created a clearer way to manage transactions and assist customers throughout the purchase.</p>
+      <p>The result was a more adaptable foundation for digital car buying.</p>
+    </div>
+    <ul class="outcomes">
+      {outcomes.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 09 Reflection -->
+  <section class="sec last">
+    <p class="eyebrow">What I Learned</p>
+    <h2>Simplifying Complexity Means Challenging the Process</h2>
+    <div class="copy wide">
+      <p>The biggest challenge wasn’t simplifying checkout.</p>
+      <p>It was recognizing that the traditional car-buying process didn’t need to dictate the digital experience.</p>
+      <p>By separating the decision to purchase from the administrative tasks required to complete a transaction, we created a more flexible model for customers and dealerships.</p>
+    </div>
+    <blockquote>Sometimes the best way to simplify a complex experience isn’t to remove steps. It’s to rethink when and why they happen.</blockquote>
+  </section>
+</div>
+
+<style>
+  .rc { --accent: #00b0d8; }
+  .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+  .sec:first-child { border-top: 0; padding-top: 0; }
+  .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+  .copy p { margin: 0 0 1rem; max-width: 34rem; }
+  .copy.wide { margin-bottom: 4rem; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
+  figcaption { margin-top: 1rem; color: var(--muted); max-width: 30rem; }
+  figcaption strong { display: block; color: var(--fg); font-weight: 500; }
+  .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }
+
+  /* 02 */
+  .problem { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; align-items: start; }
+  .problem .copy { grid-column: 1 / -1; }
+  .shot { border: 1px solid var(--rule); }
+  .metrics { display: flex; flex-direction: column; gap: 2.5rem; }
+  .big { display: block; font-size: clamp(4rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 500; }
+  .cap { display: block; margin-top: 0.5rem; color: var(--muted); }
+  .note { margin: 0; color: var(--muted); font-size: 0.875rem; }
+
+  /* 03 */
+  .principles { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .principles .num { font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -0.04em; line-height: 1; color: var(--muted); margin-bottom: 1.5rem; }
+  .principles p { margin: 0; max-width: 18rem; color: var(--muted); }
+
+  /* 04 */
+  .tag { margin: 0 0 1rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .flow ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .before ol { grid-template-columns: repeat(6, 1fr); }
+  .before li { padding: 0.9rem 0.8rem; background: var(--chip); color: var(--muted); font-size: 0.9375rem; line-height: 1.25; min-height: 5rem; }
+  .before li span { display: block; margin-bottom: 0.35rem; font-size: 0.75rem; opacity: 0.8; }
+  .after { margin-top: 3.5rem; }
+  .after ol { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .after li { padding: 1.5rem 1.25rem; min-height: 11rem; background: var(--accent); color: #000; font-size: clamp(1.15rem, 1.9vw, 1.6rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
+  .after li span { display: block; margin-bottom: 2.5rem; font-size: 0.875rem; letter-spacing: 0.06em; }
+  .order { position: relative; margin: 0 0 0 0; padding: 1.5rem 1.5rem 1.5rem; margin-top: 2.5rem; border: 2px dashed var(--accent); }
+  .order::before { content: ''; position: absolute; left: 2.5rem; top: -2.5rem; height: 2.5rem; border-left: 2px dashed var(--accent); }
+  .order .tag { color: var(--accent); }
+  .order-line { margin: 0; font-size: clamp(1.15rem, 1.9vw, 1.6rem); letter-spacing: -0.03em; line-height: 1.2; }
+
+  /* 05 */
+  .screens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .screens img { border: 1px solid var(--rule); }
+
+  /* 06 */
+  .frame img { border: 1px solid var(--rule); }
+  .sub { margin: 6rem 0 1rem; font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.03em; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .pair img { border: 1px solid var(--rule); }
+  .user { display: inline-block; margin-bottom: 1rem; padding: 0.15rem 0.7rem; border: 1px solid var(--muted); border-radius: 28px; color: var(--muted); font-size: 0.875rem; }
+
+  /* 07 */
+  .support { margin-top: 5rem; max-width: 34rem; }
+  .support img { border: 1px solid var(--rule); }
+
+  /* 08 */
+  .outcomes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .outcomes li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .outcomes h3 { font-size: clamp(1.5rem, 2.6vw, 2.25rem); letter-spacing: -0.03em; }
+  .outcomes p { margin: 0; color: var(--muted); max-width: 18rem; }
+
+  /* 09 */
+  .last { padding-bottom: 2rem; }
+  blockquote { margin: 5rem 0 0; max-width: 22ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+
+  /* Entrance motion, matching the rest of the page. */
+  @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+  h2, figure, .principles li, .outcomes li, .flow > div, blockquote, .metrics > * {
+    animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+  @media (max-width: 999px) {
+    .sec { padding: 4.5rem 0; }
+    .problem, .pair { grid-template-columns: 1fr; gap: 2.5rem; }
+    .principles, .outcomes { grid-template-columns: 1fr; gap: 2.5rem; }
+    .before ol { grid-template-columns: repeat(3, 1fr); }
+    .after ol { grid-template-columns: repeat(2, 1fr); }
+    .metrics { flex-direction: row; flex-wrap: wrap; gap: 2rem; }
+    /* Detailed screenshots stay legible: swipe sideways instead of shrinking. */
+    .scroller { overflow-x: auto; margin: 0 -1.5rem; padding: 0 1.5rem 1rem; scroll-snap-type: x mandatory; }
+    .screens { grid-template-columns: repeat(3, min(82vw, 26rem)); }
+    .screens figure { scroll-snap-align: start; }
+  }
+</style>

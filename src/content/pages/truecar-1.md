@@ -25,7 +25,7 @@ draft: false
 ![discover.png](/images/2b5722-discover.png)
 ![dealer-3.png](/images/65a508-dealer-3.png)
 
-Showroom Experience
+# Showroom Experience
 
 Empowering the car buyer to scan vehicles at the dealership to view market pricing and compare vehicles right on the mobile device. Key features included a bar code and license plate scanner, and searchable, real-time dealer inventory.
 
@@ -43,6 +43,6 @@ Order Page - Task-based non-linear flow
 
 ![discover-2.png](/images/b09f4c-discover-2.png)
 
-Content Discovery
+# Content Discovery
 
 A full overhaul of the iOS and Android apps with focus on upper funnel engagement and content discovery. The new Home Screen displayed contextual information relevant to a specific user’s geographical location and stage of the car buying process by leveraging TrueCar’s access to unlimited market data on vehicle pricing.

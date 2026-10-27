@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import RoadsterCase from '../components/RoadsterCase.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft);
@@ -8,74 +9,113 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { Content } = await render(page);
-const { title, date, role, tools } = page.data;
-// The first image in the body becomes the hero; the in-body copy is hidden.
-const hero = page.body?.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/)?.[1];
-// Lead line: the ### right after the title in the markdown, shown beside the details instead of in the flow.
-const lead = page.body?.match(/^# .*\n+### (.+)$/m)?.[1]?.replace(/\*+/g, '');
-const meta = [
-  ['Year', date.getFullYear()],
-  ['Role', role],
-  ['Tools', tools],
-].filter(([, v]) => v);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { title, date, subtitle, role, tools } = page.data;
+const body = page.body ?? '';
+
+// The ### right after the title in the markdown doubles as the About text when none is set in front matter.
+const lead = body.match(/^# .*\n+### (.+)$/m)?.[1]?.replace(/\*+/g, '');
+const about = page.data.about ?? (lead ? [lead] : []);
+// Gallery: front matter list, else the first image in the body. Its in-body copies are hidden below.
+const first = body.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/)?.[1];
+const gallery = page.data.gallery ?? (first ? [first] : []);
+const Custom = page.id === 'roadster-1' ? RoadsterCase : null;
+const facts = page.data.facts;
+const hasCase = !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
+const hideGallery = gallery.map((g) => `.case .prose img[src="${base}${g}"]`).join(',');
 ---
 <Base title={title}>
   <article class="case">
     <a class="back" href={`${base}/#work`}>&larr; Work</a>
-    <p class="display" aria-hidden="true">{title}</p>
+    <p class="display" aria-hidden="true">{`${title} `.repeat(4)}</p>
     <div class="split">
       <aside class="side">
-        <h1>{title}</h1>
-        {lead && <p class="lead">{lead}</p>}
-        <dl>
-          {meta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
-        </dl>
+        <header>
+          <h1>{title}</h1>
+          {subtitle && <p class="subtitle">{subtitle}</p>}
+        </header>
+        {about.length > 0 && (
+          <section>
+            <h2 class="label">About</h2>
+            {about.map((p) => <p class="story">{p}</p>)}
+          </section>
+        )}
+        {facts ? (
+          <div class="facts grid">
+            {facts.map((f) => <div><h2 class="label">{f.label}</h2><p>{f.value}</p></div>)}
+          </div>
+        ) : (
+        <div class="facts">
+          <div class="col">
+            {role && <div><h2 class="label">My role</h2><p>{role}</p></div>}
+            <div><h2 class="label">Year</h2><p>{page.data.year ?? date.getFullYear()}</p></div>
+          </div>
+          {tools && <div class="col"><div><h2 class="label">Tools</h2><p>{tools}</p></div></div>}
+        </div>
+        )}
+        {hasCase && <a class="pill" href="#case-study">View Case Study</a>}
       </aside>
-      <div class="media">
-        {hero && <img class="hero" src={base + hero} alt={title} />}
-        <div class="prose"><Content /></div>
+      <div class="gallery">
+        {gallery.map((src) => <img src={base + src} alt={title} />)}
       </div>
     </div>
+    {hasCase && <section id="case-study" class={Custom ? 'custom' : 'prose'}>{Custom ? <Custom /> : <Content />}</section>}
   </article>
-  {hero && <style is:global set:html={`.case .prose img[src="${base}${hero}"]{display:none}`} />}
+  {hideGallery && <style is:global set:html={`${hideGallery}{display:none}`} />}
 
   <style>
     .case { padding-top: 2rem; }
-    .back { color: var(--muted); text-decoration: none; }
+    .back { color: var(--muted); text-decoration: none; display: inline-block; margin-bottom: 3rem; }
     .back:hover { color: var(--fg); }
+
     .display {
       margin: 3rem 0 4rem; font-size: clamp(3.5rem, 13vw, 11rem); line-height: 0.9; letter-spacing: -0.05em; font-weight: 500;
-      color: var(--muted); max-width: none; overflow-wrap: anywhere;
+      color: var(--muted); max-width: none; white-space: nowrap; overflow: hidden;
     }
-    /* Details stay put on the left while the images scroll on the right. */
+    /* Details stay put on the left while the gallery scrolls on the right. */
     .split { display: grid; grid-template-columns: 4fr 8fr; gap: 3rem; align-items: start; }
-    .side { position: sticky; top: 2rem; }
-    .side h1 { font-size: clamp(1.75rem, 3vw, 2.5rem); margin: 0 0 1rem; }
-    .lead { color: var(--muted); font-size: 1.25rem; line-height: 1.35; letter-spacing: -0.02em; margin: 0 0 2rem; }
-    dl { margin: 0; display: grid; gap: 1.25rem; }
-    dt { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
-    dd { margin: 0.15rem 0 0; }
-    .media { min-width: 0; }
-    .hero, .prose :global(img) { width: 100%; margin: 0 0 1.5rem; border-radius: 0; }
-    .prose :global(h1), .prose :global(h1 + h3) { display: none; }
-    .prose :global(h2) { font-size: clamp(1.75rem, 3.2vw, 3rem); margin: 3rem 0 1rem; }
-    .prose :global(h3) { font-size: clamp(1.25rem, 2vw, 1.75rem); line-height: 1.3; letter-spacing: -0.02em; }
+    .side { position: sticky; top: 2rem; display: flex; flex-direction: column; gap: 2rem; }
+    .side h1 { font-size: clamp(1.75rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; margin: 0 0 0.75rem; }
+    .subtitle { margin: 0; color: var(--muted); max-width: none; }
+    .label { margin: 0 0 0.5rem; font: inherit; font-size: 0.875rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .story { margin: 0 0 1.25rem; max-width: none; }
+    .story:last-child { margin-bottom: 0; }
+    .facts { display: flex; gap: 2rem; }
+    .col { display: flex; flex-direction: column; gap: 2.5rem; }
+    .facts p { margin: 0; max-width: 15rem; }
+    .facts.grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    .facts.grid p { max-width: none; }
+    .custom { margin-top: 8rem; padding-top: 3rem; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
+    .pill {
+      display: grid; place-items: center; height: 2.9rem; border: 2px solid var(--muted); border-radius: 28px;
+      color: var(--fg); text-decoration: none; font-weight: 500; transition: border-color 0.2s;
+    }
+    .pill:hover, .pill:focus-visible { border-color: var(--fg); }
 
-    /* Entrance motion: title slides up, details and images follow. */
+    .gallery { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding-bottom: 70vh; }
+    .gallery img { width: 100%; margin: 0; border-radius: 0; }
+
+    /* Full case study below the overview. */
+    .prose { margin-top: 8rem; padding-top: 3rem; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
+    .prose > :global(h1:first-child), .prose > :global(h1:first-child + h3) { display: none; }
+    .prose :global(h1) { font-size: clamp(1.75rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; margin: 5rem 0 1.5rem; }
+    .prose :global(h3) { font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.35; letter-spacing: -0.02em; font-weight: 400; max-width: 46rem; }
+    .prose :global(img) { width: 100%; margin: 2rem 0; border-radius: 0; }
+
+    /* Entrance motion: details slide in, gallery and case study rise as they arrive. */
     @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
     @keyframes slide { from { opacity: 0; transform: translateX(-1.5rem); } to { opacity: 1; transform: none; } }
     .back { animation: slide 0.5s both; }
-    .display { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.05s both; }
-    .side { animation: slide 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both; }
-    .hero { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both; }
-    .prose :global(img), .prose :global(p), .prose :global(h2), .prose :global(h3) {
+    .side { animation: slide 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s both; }
+    .gallery img { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both; }
+    .gallery img + img { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+    .prose :global(img), .prose :global(p), .prose :global(h1), .prose :global(h3) {
       animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
     }
     @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
     @media (max-width: 999px) {
-      .split { grid-template-columns: 1fr; gap: 2rem; }
+      .split { grid-template-columns: 1fr; gap: 2.5rem; }
       .side { position: static; }
     }
   </style>

@@ -10,7 +10,7 @@ draft: false
 
 ![search_v3b.gif](/images/20247c-search_v3b.gif)
 
-AI Powered Search
+# AI Powered Search
 
 As the lead designer, I was responsible for concept and UX strategy for an intelligent e-commerce search engine. This new product prioritizes the B2B Commerce user needs such as searching via SKU number (or item number), and quick reordering features.
 
@@ -31,7 +31,7 @@ The B2B Storefront displays prices based on the buyer account’s negotiated con
 ![Search-Pages-UI.png](/images/30d035-Search-Pages-UI.png)
 ![2.2-Searchable-Attributes-Add.png](/images/66b4b2-2.2-Searchable-Attributes-Add.png)
 
-Search Results Configuration
+# Search Results Configuration
 
 A new app “Commerce” using the power of the CRM, offers admins and e-commerce managers the ability to customize their online store from product catalogs, to search results, and search index management.
 
@@ -42,7 +42,7 @@ A new app “Commerce” using the power of the CRM, offers admins and e-commerc
 
 ![builder.jpg](/images/e94c5a-builder.jpg)
 
-Experience Builder
+# Experience Builder
 
 A platform that supports high-level customization of out-of-the-box components designed for commerce, and is also extensible to developers to create their own components and themes.
 

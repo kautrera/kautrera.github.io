@@ -2,6 +2,17 @@
 title: "Roadster"
 date: 2021-07-01
 draft: false
+subtitle: "Making Car Buying Feel Less Like Car Buying"
+about:
+  - "Rebuilt Roadster’s online car-buying experience, replacing a rigid, multi-step checkout with a flexible, guided journey that lets customers purchase a vehicle on their terms."
+  - "Connected the consumer and dealership experiences, simplifying complex workflows and making it easier to start, manage, and complete a purchase online."
+facts:
+  - { label: "Role", value: "Head of Design" }
+  - { label: "Focus", value: "Product Strategy, UX Design, Design Leadership" }
+  - { label: "Platform", value: "Consumer E-commerce & Dealership Management" }
+gallery:
+  - /images/5ad1e9-Screen-Shot-2021-06-28-at-12.45.15-PM.jpg
+  - /images/roadster-finance.png
 ---
 
 # Roadster
@@ -9,9 +20,8 @@ draft: false
 ### A modern and non-linear car buying experience that empowers sales agents and consumers to fully transact online, saving time and improving overall satisfaction.
 
 ![Screen+Shot+2021-06-28+at+12.45.15+PM.jpg](/images/5ad1e9-Screen-Shot-2021-06-28-at-12.45.15-PM.jpg)
-![Screen Shot 2021-06-28 at 1.08.17 PM.png](/images/5f6fc7-Screen-Shot-2021-06-28-at-1.08.17-PM.png)
 
-The Problem
+# The Problem
 
 Roadster’s old checkout (buy flow) forced customers through a long and linear process regardless of their current situation. In turn, sales agents were forced to take the consumer out of Roadster to better accommodate their needs, resulting in low conversion and completion rates.
 
@@ -33,13 +43,13 @@ Roadster’s old checkout (buy flow) forced customers through a long and linear 
 
 ![Screen Shot 2021-06-28 at 10.08.10 PM.png](/images/d17262-Screen-Shot-2021-06-28-at-10.08.10-PM.png)
 
-Old User Flow
+# Old User Flow
 
 A liner experience with massive drop-offs. Consumers had to jump through many hoops before they could initiate their car purchase.
 
 ![Screen Shot 2021-06-28 at 10.11.10 PM.png](/images/8257d0-Screen-Shot-2021-06-28-at-10.11.10-PM.png)
 
-New User Flow
+# New User Flow
 
 A familiar e-commerce checkout experience that lands the consumer on a task-based order page. In this order page the consumer can perform tasks non-linearly and at their own convenience.
 
@@ -78,7 +88,9 @@ Order Page - Task-based non-linear flow
 ![Screen Shot 2021-06-28 at 10.23.21 PM.png](/images/600957-Screen-Shot-2021-06-28-at-10.23.21-PM.png)
 ![Screen Shot 2021-06-28 at 11.45.57 PM.png](/images/a0824a-Screen-Shot-2021-06-28-at-11.45.57-PM.png)
 
-Recent Results
+# Recent Results
+
+![Screen Shot 2021-06-28 at 1.08.17 PM.png](/images/5f6fc7-Screen-Shot-2021-06-28-at-1.08.17-PM.png)
 
 The old flow showed a 2% conversion rate (orders submitted), where the new flow shows somewhere around 7% and 8% with almost 80% of those orders having some tasks completed.
 
