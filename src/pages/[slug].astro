@@ -49,6 +49,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     <p class="display" aria-hidden="true"><span>{`${title} `.repeat(6)}</span></p>
     <div id="gate-content">
     {Private && <Fragment set:html={'<!--gate:start-->'} />}
+    {(!gated || Private) && (
     <div class="split">
       <aside class="side">
         <header>
@@ -82,6 +83,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
           : <img src={g.url} alt={title} />)}
       </div>
     </div>
+    )}
     {hasCase && Custom && <section id="case-study" class="custom"><Custom /></section>}
     {hasCase && !Custom && !gated && <section id="case-study" class="prose"><Content /></section>}
     {Private && <Fragment set:html={'<!--gate:end-->'} />}
