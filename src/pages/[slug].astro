@@ -4,9 +4,10 @@ import Base from '../layouts/Base.astro';
 import RoadsterCase from '../components/RoadsterCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
 import '../styles/commerce-case.css';
+import '../styles/studio-case.css';
 
 // Protected pages: private sources exist locally only (gitignored). CI renders from the committed ciphertext.
-const privateCases = import.meta.glob('../../private/*/CommerceCase.astro', { eager: true }) as Record<string, any>;
+const privateCases = import.meta.glob('../../private/*/*Case.astro', { eager: true }) as Record<string, any>;
 const privateMeta = import.meta.glob('../../private/*/meta.json', { eager: true, import: 'default' }) as Record<string, any>;
 const privateAssets = import.meta.glob('../../private/*/*.{webp,mp4}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
@@ -22,7 +23,7 @@ const { title, date, role, tools } = page.data;
 const body = page.body ?? '';
 const gated = !!page.data.protected;
 const dir = `../../private/${page.id}`;
-const Private = privateCases[`${dir}/CommerceCase.astro`]?.default;
+const Private = Object.entries(privateCases).find(([k]) => k.startsWith(`${dir}/`))?.[1]?.default;
 const meta = privateMeta[`${dir}/meta.json`];
 const sealedFile = `${process.cwd()}/sealed/${page.id}.json`;
 const sealed = gated && !Private && existsSync(sealedFile) ? readFileSync(sealedFile, 'utf8') : '';
@@ -80,7 +81,9 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
       </aside>
       <div class="gallery">
         {gallery.map((g: any) => g.caption
-          ? <figure><img src={g.url} alt={g.caption} /><figcaption>{g.caption}</figcaption></figure>
+          ? <figure>{g.src.endsWith('.mp4')
+              ? <video src={g.url} aria-label={g.caption} muted loop playsinline autoplay preload="auto"></video>
+              : <img src={g.url} alt={g.caption} />}<figcaption>{g.caption}</figcaption></figure>
           : <img src={g.url} alt={title} />)}
       </div>
     </div>
@@ -151,6 +154,10 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
 
   <script is:inline>
     // The big title drifts left as the page scrolls down.
+    // Hero clip stays still for reduced-motion visitors.
+    const still = () => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('.gallery video').forEach((v) => { v.pause(); v.controls = true; }); };
+    still();
+    document.addEventListener('gate:open', still);
     const drift = document.querySelector('.display span');
     if (drift && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const move = () => { drift.style.transform = `translateX(${-Math.min(scrollY, 1400)}px)`; };
@@ -197,6 +204,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .gallery { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
     .gallery img { width: 100%; height: auto; margin: 0; border-radius: 0; }
     .gallery figure { margin: 0; }
+    .gallery video { width: 100%; height: auto; display: block; }
     .gallery figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
     #gate { max-width: 26rem; margin: 6rem 0 8rem; }
     #gate label { display: block; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
