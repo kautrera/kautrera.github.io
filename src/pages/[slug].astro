@@ -2,6 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import RoadsterCase from '../components/RoadsterCase.astro';
+import CustomAppsCase from '../components/CustomAppsCase.astro';
+import TrueCarCase from '../components/TrueCarCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
 import '../styles/commerce-case.css';
 import '../styles/studio-case.css';
@@ -40,7 +42,7 @@ const gallery = gallerySrc.map((g: any) => {
   const item = typeof g === 'string' ? { src: g } : g;
   return { ...item, url: meta ? privateAssets[`${dir}/${item.src}`] : base + item.src };
 });
-const Custom = page.id === 'roadster-1' ? RoadsterCase : Private ?? null;
+const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : Private ?? null;
 const facts = meta?.facts ?? page.data.facts;
 const hasCase = gated || !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
 const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="${g.url}"]`).join(',');

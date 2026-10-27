@@ -1,0 +1,318 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (name: string) => `${base}/images/${name}.webp`;
+
+const trio = [
+  ['01', 'Discovery', 'Find the Right Car', 'Explore vehicles that match your needs.', 'tc-discover-2', 'Vehicle browsing and recommendations on the TrueCar home screens'],
+  ['02', 'Pricing', 'Understand the Price', 'See how a vehicle compares with the market.', 'tc-used-curve', 'Market pricing distribution with Great Price, Average Paid, and Above Market'],
+  ['03', 'Dealership', 'Shop With Confidence', 'Access useful information while visiting a dealership.', 'tc-dealer-3', 'Dealer profile and VIN barcode scanner'],
+];
+const stages = [
+  ['01', 'Discover', 'Find vehicles and explore options.', 'tc-discover', 'Featured categories on the home screen'],
+  ['02', 'Evaluate', 'Understand pricing and compare market value.', 'tc-used-curve', 'Market pricing visualization'],
+  ['03', 'Shop', 'Access inventory and vehicle information at the dealership.', 'tc-dealership', 'Dealership profile'],
+];
+const showroom = [
+  ['Scan a Vehicle', 'Customers could identify vehicles using a barcode or license plate scanner.'],
+  ['Explore Dealer Inventory', 'Shoppers could browse available vehicles directly from their mobile device.'],
+  ['Understand Market Pricing', 'Vehicle information could be evaluated with TrueCar’s pricing context.'],
+];
+const used = [
+  ['Put Pricing in Context', 'Help shoppers understand a vehicle’s listed price relative to the market.'],
+  ['Make Comparisons Easier', 'Present complex market information through a visual model that is easier to interpret.'],
+];
+const discover = [
+  ['Explore by Interest', 'Browse vehicle categories without needing to know the exact make or model.'],
+  ['Pick Up Where You Left Off', 'Recently viewed vehicles help shoppers continue their research.'],
+  ['Discover Relevant Options', 'Use location and shopping context to surface useful vehicle information.'],
+];
+const lead = [
+  ['Mobile Experience Strategy', 'Shaping intuitive experiences across multiple stages of the purchasing journey.'],
+  ['Information Design', 'Translating complex automotive pricing data into understandable interfaces.'],
+  ['Cross-Functional Leadership', 'Leading the delivery of connected consumer experiences across mobile platforms.'],
+];
+const outcomes = [
+  ['Contextual Discovery', 'A redesigned mobile home experience.'],
+  ['Clearer Price Comparisons', 'Market value presented through visual information.'],
+  ['Connected Showroom Shopping', 'Vehicle scanning and dealership inventory on mobile.'],
+];
+---
+<div class="tc">
+  <p class="lede">A more informed car-buying experience, from discovery to dealership.</p>
+
+  <!-- 01 -->
+  <section class="sec">
+    <p class="eyebrow">The Challenge</p>
+    <h2>Buying a Car Comes With Too Many Unknowns</h2>
+    <div class="copy wide">
+      <p>Finding the right car is only part of the challenge.</p>
+      <p>Buyers also need to understand pricing, compare vehicles, evaluate inventory, and navigate the dealership experience.</p>
+      <p>And unlike many other purchases, knowing whether you’re getting a fair deal isn’t always straightforward.</p>
+      <p>TrueCar’s opportunity was to make complex automotive market information accessible and useful throughout the shopping journey.</p>
+    </div>
+    <ol class="trio">
+      {trio.map(([n, , t, d, i, alt]) => (
+        <li>
+          <figure class="shot"><img src={img(i)} alt={alt} loading="lazy" /></figure>
+          <span class="num">{n}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <p class="eyebrow">The Approach</p>
+    <h2>Confidence at Every Step</h2>
+    <div class="copy wide">
+      <p>Car buying isn’t one continuous interaction.</p>
+      <p>People move between browsing, comparing prices, researching specific vehicles, and visiting dealerships.</p>
+      <p>Our work focused on supporting these different moments with relevant information and intuitive mobile experiences.</p>
+      <p>Rather than treating discovery, pricing, and dealership shopping as unrelated problems, the three initiatives addressed different parts of the same customer journey.</p>
+    </div>
+    <ol class="journey">
+      {stages.map(([n, t, d, i, alt]) => (
+        <li>
+          <div class="txt"><span class="num">{n}</span><h3>{t}</h3><p>{d}</p></div>
+          <figure class="thumb"><img src={img(i)} alt={alt} loading="lazy" /></figure>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <p class="eyebrow">Project 01 · Showroom Experience</p>
+    <h2>Bringing Transparency Into the Dealership</h2>
+    <div class="copy wide">
+      <p>A buyer’s need for information doesn’t disappear when they walk into a dealership.</p>
+      <p>We explored how TrueCar’s mobile experience could support shoppers in that moment, giving them access to vehicle pricing and inventory information directly from their phones.</p>
+      <p>The Showroom Experience introduced vehicle scanning and real-time dealership inventory, connecting physical vehicles with relevant digital information.</p>
+    </div>
+    <figure class="stage"><img src={img('tc-dealer-3')} alt="Dealer profile with saved vehicles and a VIN barcode scanner" loading="lazy" /></figure>
+    <ul class="three">
+      {showroom.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+    <div class="detail">
+      <figure><img src={img('tc-dealership')} alt="Dealership profile with salesperson, inventory counts, and a scan action" loading="lazy" /></figure>
+      <p class="callout">Connecting the physical showroom with the digital shopping experience.</p>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <p class="eyebrow">Project 02 · Used Vehicle Shopping</p>
+    <h2>Making Market Value Understandable</h2>
+    <div class="copy wide">
+      <p>Used vehicle pricing introduces another layer of complexity.</p>
+      <p>Two similar vehicles can have very different prices, making it difficult for shoppers to evaluate whether a listing represents a good deal.</p>
+      <p>We redesigned TrueCar’s used vehicle shopping experience with two goals: make market pricing easier to understand and create a more intuitive, consistent experience across new and used vehicle shopping.</p>
+    </div>
+    <figure class="stage panel"><img src={img('tc-used-curve')} alt="Market pricing distribution: a $15,880 list price marked as a Great Price, with Great Price $16,093, Average Paid $18,941, and Above Market $21,635" loading="lazy" /></figure>
+    <ul class="three two">
+      {used.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+    <div class="copy wide more">
+      <p>The redesign also aimed to establish a more consistent experience between new and used vehicle shopping.</p>
+      <p>As part of the initiative, the team explored React Native through a proof of concept, evaluating a potential approach for mobile development.</p>
+    </div>
+    <p class="callout">Turning complex market data into information people can act on.</p>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <p class="eyebrow">Project 03 · Content Discovery</p>
+    <h2>Helping Shoppers Find Their Next Car</h2>
+    <div class="copy wide">
+      <p>Not every shopper begins with a specific vehicle in mind.</p>
+      <p>Some are exploring categories, comparing options, or trying to understand what fits their lifestyle.</p>
+      <p>We overhauled TrueCar’s iOS and Android experience with a focus on discovery and early engagement.</p>
+      <p>The new home screen brought together vehicle categories, recommendations, and contextual information relevant to the shopper’s location and stage in the buying journey.</p>
+    </div>
+    <figure class="stage"><img src={img('tc-discover-2')} alt="Home screens with New and Used entry points, featured categories, recently viewed and recommended vehicles, and bottom navigation" loading="lazy" /></figure>
+    <ul class="three">
+      {discover.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+    <div class="detail">
+      <figure><img src={img('tc-discover')} alt="Close-up of the featured categories section" loading="lazy" /></figure>
+      <p class="callout">A discovery experience that meets shoppers wherever they are in the journey.</p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <p class="eyebrow">My Contribution</p>
+    <h2>Connecting the Shopping Journey</h2>
+    <div class="copy wide">
+      <p>Over three and a half years at TrueCar, I led cross-functional teams delivering mobile-first product experiences across iOS and Android.</p>
+      <p>My work spanned multiple stages of the customer journey, from early discovery to price evaluation and dealership shopping.</p>
+      <p>Each initiative presented different UX challenges, but they shared a common objective: making complex automotive information more accessible and useful to consumers.</p>
+      <p>Working across these experiences required balancing customer needs, business objectives, technical considerations, and consistency across platforms.</p>
+    </div>
+    <ol class="trio">
+      {trio.map(([, k, , , i, alt]) => (
+        <li>
+          <figure class="shot"><img src={img(i)} alt={alt} loading="lazy" /></figure>
+          <span class="num">{k}</span>
+        </li>
+      ))}
+    </ol>
+    <ul class="three">
+      {lead.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <p class="eyebrow">The Work</p>
+    <h2>A More Connected Car-Buying Experience</h2>
+    <div class="copy wide">
+      <p>Across these initiatives, we expanded the ways TrueCar could support consumers throughout the shopping journey.</p>
+      <p>The Showroom Experience brought vehicle information into the dealership.</p>
+      <p>The Used Vehicle Shopping redesign focused on helping customers understand market value.</p>
+      <p>And the Content Discovery overhaul created a more contextual starting point for exploring vehicles.</p>
+      <p>Together, these initiatives contributed to a broader experience centered on transparency, accessible information, and informed purchasing decisions.</p>
+    </div>
+    <ol class="montage">
+      <li><figure class="shot"><img src={img('tc-discover')} alt="Discovery: featured categories" loading="lazy" /></figure></li>
+      <li class="arrow" aria-hidden="true">&rarr;</li>
+      <li><figure class="shot"><img src={img('tc-used-curve')} alt="Pricing: market value distribution" loading="lazy" /></figure></li>
+      <li class="arrow" aria-hidden="true">&rarr;</li>
+      <li><figure class="shot"><img src={img('tc-dealership')} alt="Showroom: dealership profile" loading="lazy" /></figure></li>
+    </ol>
+    <ul class="three">
+      {outcomes.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 08 -->
+  <section class="sec last">
+    <p class="eyebrow">What I Learned</p>
+    <h2>Better Information. Better Decisions.</h2>
+    <div class="copy wide">
+      <p>One of the most important challenges in consumer product design is helping people make sense of complex information.</p>
+      <p>That becomes especially important when the decision is expensive, unfamiliar, or emotionally significant.</p>
+      <p>Across these TrueCar initiatives, the design opportunity was to make relevant information easier to find, understand, and use.</p>
+      <p>Whether shoppers were browsing from home or standing inside a dealership, the goal was the same: help them make more informed decisions.</p>
+    </div>
+    <blockquote>Great product experiences turn complex information into confident decisions.</blockquote>
+  </section>
+
+  <dialog class="lb" aria-label="Enlarged image">
+    <img alt="" />
+    <button type="button" class="nav prev" aria-label="Previous image">&larr;</button>
+    <button type="button" class="nav next" aria-label="Next image">&rarr;</button>
+  </dialog>
+</div>
+
+<script>
+  const lb = document.querySelector<HTMLDialogElement>('.tc .lb')!;
+  const big = lb.querySelector('img')!;
+  const prev = lb.querySelector<HTMLButtonElement>('.prev')!;
+  const next = lb.querySelector<HTMLButtonElement>('.next')!;
+  let group: HTMLImageElement[] = [];
+  let at = 0;
+  const show = (i: number) => {
+    at = (i + group.length) % group.length;
+    const im = group[at];
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt;
+    prev.hidden = next.hidden = group.length < 2;
+  };
+  document.querySelectorAll<HTMLImageElement>('.tc section img, .gallery img').forEach((im) => {
+    im.tabIndex = 0;
+    im.style.cursor = 'zoom-in';
+    im.setAttribute('role', 'button');
+    im.setAttribute('aria-label', `Enlarge: ${im.alt}`);
+    const open = () => {
+      const scope = im.closest('section, .gallery')!;
+      group = [...scope.querySelectorAll<HTMLImageElement>('img')];
+      show(group.indexOf(im));
+      lb.showModal();
+    };
+    im.addEventListener('click', open);
+    im.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  prev.addEventListener('click', (e) => { e.stopPropagation(); show(at - 1); });
+  next.addEventListener('click', (e) => { e.stopPropagation(); show(at + 1); });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(at - 1);
+    if (e.key === 'ArrowRight') show(at + 1);
+  });
+  lb.addEventListener('click', () => lb.close());
+</script>
+
+<style>
+  .tc { --accent: #1f6fa8; }
+  .lede { margin: 0 0 7rem; max-width: 22ch; font-size: clamp(1.75rem, 3.6vw, 3rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+  .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+  .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+  .copy p { margin: 0 0 1rem; max-width: 34rem; }
+  .copy.wide { margin-bottom: 4rem; }
+  .copy.wide p { max-width: 46rem; }
+  .copy.more { margin: 4rem 0 0; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; cursor: zoom-in; }
+  figure img { border: 1px solid var(--rule); }
+  .num { display: block; margin: 1rem 0 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  ul, ol { list-style: none; padding: 0; margin: 0; }
+  li p { margin: 0; color: var(--muted); max-width: 22rem; }
+  .callout { margin: 0; max-width: 24ch; font-size: clamp(1.5rem, 2.8vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; }
+
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .shot { background: var(--chip); }
+  .shot img { aspect-ratio: 1 / 1.1; object-fit: contain; border: 0; }
+
+  .journey { display: grid; gap: 3rem; }
+  .journey li { position: relative; display: grid; grid-template-columns: 1fr 12rem; gap: 3rem; align-items: center; padding: 2rem 0; border-top: 2px solid var(--fg); }
+  .journey li:not(:last-child)::after { content: ''; position: absolute; left: 0; bottom: -3rem; height: 3rem; border-left: 2px dashed var(--muted); }
+  .journey li:first-child { border-top-width: 2px; }
+  .journey h3 { font-size: clamp(1.75rem, 3.2vw, 2.75rem); letter-spacing: -0.04em; }
+  .journey .num { margin-top: 0; }
+  .journey .thumb { background: var(--chip); }
+  .journey .thumb img { aspect-ratio: 1 / 1; object-fit: contain; border: 0; }
+
+  .stage { max-width: 44rem; margin: 0 auto 5rem; }
+  .stage.panel { max-width: 34rem; padding: 3rem; background: var(--chip); }
+  .stage.panel img { border: 0; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .three.two { grid-template-columns: repeat(2, 1fr); }
+  .three li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .detail { display: grid; grid-template-columns: 5fr 7fr; gap: 4rem; align-items: center; margin-top: 6rem; }
+  .detail figure { background: var(--chip); }
+  .detail img { border: 0; }
+
+  .montage { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 1.5rem; align-items: center; margin-bottom: 5rem; }
+  .montage .arrow { color: var(--muted); font-size: 2rem; }
+
+  .last { padding-bottom: 2rem; }
+  blockquote { margin: 5rem 0 0; max-width: 22ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+
+  .lb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+  .lb::backdrop { background: rgba(0, 0, 0, 0.88); }
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+  .nav:hover, .nav:focus-visible { background: #fff; outline: 2px solid var(--accent); }
+  .nav[hidden] { display: none; }
+  .prev { left: 1.5rem; }
+  .next { right: 1.5rem; }
+  .lb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+  h2, figure, .three li, .journey li, .callout, blockquote {
+    animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+  @media (max-width: 999px) {
+    .sec { padding: 4.5rem 0; }
+    .trio, .three, .three.two, .detail { grid-template-columns: 1fr; gap: 2.5rem; }
+    .journey li { grid-template-columns: 1fr 8rem; gap: 1.5rem; }
+    .montage { grid-template-columns: 1fr; }
+    .montage .arrow { display: none; }
+    .stage.panel { padding: 1.5rem; }
+  }
+</style>

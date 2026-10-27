@@ -3,12 +3,14 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const hidden = ['about', 'contact', 'consulting'];
+const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar'];
 // Email is shipped base64-encoded and assembled in the browser, so scrapers reading raw HTML never see it.
 const emailToken = Buffer.from('karen.utera@gmail.com').toString('base64');
+// Wall position keeps an older project's former date, so changing a shown year doesn't reshuffle the wall.
+const stamp = (p) => (p.id === 'truecar-1' ? new Date('2021-07-01') : p.data.date).getTime();
 const projects = (await getCollection('pages'))
   .filter((p) => !p.data.draft && !p.data.protected && !hidden.includes(p.id))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  .sort((a, b) => stamp(b) - stamp(a));
 
 // The Squarespace import left near-duplicate pages; keep the newest per title.
 const seen = new Set();
@@ -42,11 +44,10 @@ wall.sort((a, b) => rank(a) - rank(b));
 
 // Current projects, placeholders until case studies exist. Add `image` and `id` to link one.
 const current = [
-  { title: 'Custom Apps', image: '/images/custom-apps.webp' },
+  { id: 'custom-apps', title: 'Custom Apps', image: '/images/custom-apps.webp' },
   { id: 'bm-ux-studio', title: 'BM UX Studio', image: '/images/bm-ux-studio.webp' },
   'Commerce D2C',
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
-  { title: 'Commerce Design System', image: '/images/commerce-design-system.png' },
   'Page Designer',
   'Visual Merchandising',
   'Catalog Enrichment',
@@ -63,15 +64,15 @@ const a = tiles.findIndex((t) => t.title === 'Commerce Studio');
 const b = tiles.findIndex((t) => t.id === 'b2b-commerce');
 if (a > -1 && b > -1) [tiles[a], tiles[b]] = [tiles[b], tiles[a]];
 
-// Swap TrueCar and Commerce Design System.
-const c = tiles.findIndex((t) => t.title === 'TrueCar');
-const d = tiles.findIndex((t) => t.title === 'Commerce Design System');
-if (c > -1 && d > -1) [tiles[c], tiles[d]] = [tiles[d], tiles[c]];
-
 // Swap Visual Merchandising and Clippit.
 const e = tiles.findIndex((t) => t.title === 'Visual Merchandising');
 const f = tiles.findIndex((t) => t.id === 'clippit');
 if (e > -1 && f > -1) [tiles[e], tiles[f]] = [tiles[f], tiles[e]];
+
+// Swap Commerce D2C and Visual Merchandising.
+const k1 = tiles.findIndex((t) => t.title === 'Commerce D2C');
+const k2 = tiles.findIndex((t) => t.title === 'Visual Merchandising');
+if (k1 > -1 && k2 > -1) [tiles[k1], tiles[k2]] = [tiles[k2], tiles[k1]];
 
 // Swap Catalog Enrichment and Ello.
 const g = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
@@ -187,7 +188,7 @@ const audiences = [
     .wall li.tone-2 .blank { color: #fff; }
     @media (max-width: 1100px) { .wall { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px) { .wall { grid-template-columns: 1fr; } }
-    #intro { min-height: 62vh; }
+    #intro { min-height: 47vh; }
     #work { margin-bottom: 10rem; }
     #about, #contact { margin-bottom: 8rem; }
     #about h2, #contact h2 { margin-top: 0; }

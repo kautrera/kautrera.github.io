@@ -1,0 +1,503 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (name: string) => `${base}/images/${name}.webp`;
+
+const principles = [
+  ['01', 'Consistent by design', 'One design language across applications. Shared components, patterns, and behaviors built on Salesforce Lightning Design System 2.'],
+  ['02', 'Personalized navigation', 'Let users organize their tools around the work they do most often.'],
+  ['03', 'Unified discovery', 'Help users quickly find tools without navigating complex menu structures.'],
+  ['04', 'Job-centered workspaces', 'Bring related capabilities together around real tasks and workflows.'],
+];
+const apps = [
+  ['Merchandising app', 'Catalogs, campaigns, search, product curation.'],
+  ['Administration app', 'System settings, sites, permissions, configuration.'],
+  ['Custom app', 'User-selected tools organized around their workflow.'],
+];
+const states = [
+  ['01', 'Create an app', 'Start from a template or a blank application.'],
+  ['02', 'Organize the workspace', 'Create and rename navigation sections, then add the pages and modules used most.'],
+  ['03', 'Work in context', 'The finished custom app shows the selected tools inside the shared Business Manager framework.'],
+];
+const released = [
+  'Merchandising template or manual setup',
+  'Create, rename, and delete sections',
+  'Add modules by modal or drag and drop',
+  'Rename and delete Custom Apps',
+];
+const discover = [
+  ['01', 'Search', 'Global module search, with results across Merchant Tools and Administration.'],
+  ['02', 'Open', 'The selected module opens directly.'],
+  ['03', 'Organize', 'The module appears in a temporary navigation section, where it can be added to a permanent one.'],
+];
+const outcomes = [
+  ['Personalized applications', 'Users can create applications tailored to their work.'],
+  ['Configurable navigation', 'Users can create sections and organize frequently used modules.'],
+  ['Unified search', 'Users can find modules across Merchant Tools and Administration.'],
+  ['Shared framework', 'Core system applications use the updated navigation architecture.'],
+];
+const levels = [
+  ['Platform', 'Shared application shell, design language, navigation, and search.'],
+  ['Applications', 'Merchant Tools, Administration, and Custom Apps.'],
+  ['Workspaces', 'Job-specific experiences built within the shared framework.'],
+];
+const lead = [
+  ['UX vision & strategy', 'Defined the direction for a customizable, job-centered enterprise experience.'],
+  ['Information architecture', 'Established navigation principles designed to balance usability, flexibility, and consistency.'],
+  ['Cross-functional alignment', 'Worked across UX, product, and engineering to move the framework from idea to implementation.'],
+];
+const next = [
+  ['Personalized homepages', 'Relevant insights and work organized around user priorities.'],
+  ['Job-centered workspaces', 'Related tasks and tools brought together.'],
+  ['Agentic experiences', 'Contextual assistance embedded into workflows.'],
+];
+---
+<div class="ca">
+  <!-- 01 -->
+  <section class="sec">
+    <p class="eyebrow">The Challenge</p>
+    <h2>Navigation Was Getting in the Way</h2>
+    <div class="split2">
+      <div class="copy">
+        <p>Business Manager is the operational center for thousands of commerce businesses.</p>
+        <p>But years of expanding functionality had created a complex application where merchants struggled to find the tools they needed.</p>
+        <p>Navigation reflected the structure of the software rather than the way people worked.</p>
+        <p>Even common tasks required moving between disconnected modules, remembering where functionality lived, and navigating deeply nested menus.</p>
+        <p>Customer feedback consistently highlighted usability, complexity, and efficiency as major concerns.</p>
+      </div>
+      <figure class="shot">
+        <span class="user">The existing experience</span>
+        <img src={img('ca-before')} alt="The original Business Manager home page with fixed, nested navigation" loading="lazy" />
+        <figcaption>Fixed navigation and a dense application layout.</figcaption>
+      </figure>
+    </div>
+    <div class="evidence">
+      <div>
+        <span class="big"><span class="count" data-to="65">65</span>%</span>
+        <p class="cap">Ease of use improved by reduced complexity: a top customer concern.</p>
+        <p class="src">Q2 B2C Customer Advisory Roundtable</p>
+      </div>
+      <blockquote class="quote">
+        “Constantly fighting with a UI.”
+        <cite>Backend Services Engineering Manager, customer</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec full">
+    <p class="eyebrow">Rethinking the Problem</p>
+    <h2>A New Coat of Paint Wasn’t Enough</h2>
+    <div class="copy wide">
+      <p>Modernizing Business Manager initially focused on updating its visual design and navigation.</p>
+      <p>But a more polished interface didn’t necessarily make the underlying workflows easier. Users still had to navigate the same application structure, regardless of their responsibilities or priorities.</p>
+      <p>The problem wasn’t simply how the interface looked. It was how the experience was organized.</p>
+      <p>We needed to move beyond a UI refresh and rethink the framework itself.</p>
+    </div>
+    <div class="versus">
+      <figure>
+        <span class="user">Before: UI refresh</span>
+        <img class="crop-nav" src={img('ca-before-nav')} alt="Fixed, application-centered navigation" loading="lazy" />
+        <figcaption>Fixed, application-centered navigation.</figcaption>
+      </figure>
+      <p class="mid">The opportunity was to change how the product works, not just how it looks.</p>
+      <figure>
+        <span class="user accent">After: flexible framework</span>
+        <img src={img('ca-framework')} alt="Global search, KPIs, and a customizable navigation" loading="lazy" />
+        <figcaption>Navigation and workspaces that adapt to the merchant.</figcaption>
+      </figure>
+    </div>
+    <div class="evidence one">
+      <div>
+        <span class="big"><span class="count" data-to="61">61</span>%</span>
+        <p class="cap">of 400 respondents said they found a refreshed Business Manager layout harder to use.</p>
+        <p class="src">DWithEase community survey, not a Salesforce usability study</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <p class="eyebrow">The Approach</p>
+    <h2>Design Around Jobs, Not Modules</h2>
+    <div class="copy wide">
+      <p>Merchants don’t think about their work in terms of application architecture. They think about launching campaigns, managing catalogs, improving search results, and merchandising products.</p>
+      <p>I helped define a framework that puts these goals at the center of the experience. Instead of requiring every user to navigate the same structure, the system provides a flexible foundation for organizing tools around individual needs.</p>
+      <p>The strategy centered on four principles.</p>
+    </div>
+    <ol class="four">
+      {principles.map(([n, t, d]) => (
+        <li><span class="num">{n}</span><h3>{t}</h3><p>{d}</p></li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec full">
+    <p class="eyebrow">The Core Innovation</p>
+    <h2>One Framework. Many Ways to Work.</h2>
+    <div class="copy wide">
+      <p>Different roles need different tools. A merchandiser managing product launches has different priorities from an administrator configuring environments or a developer maintaining integrations.</p>
+      <p>A single, fixed navigation structure can’t serve every workflow equally well.</p>
+      <p>Custom Apps introduces a flexible application model that lets users organize the tools they need into personalized spaces. The underlying platform remains consistent while the navigation adapts to each user’s responsibilities.</p>
+    </div>
+    <figure class="frame">
+      <div class="laptop">
+        <div class="lid">
+          <div class="vid">
+            <video src={`${base}/images/ca-navigation.mp4`} muted loop playsinline preload="metadata" aria-label="Creating a navigation section and adding pages to a custom app"></video>
+            <button type="button" class="pp" aria-label="Pause animation">Pause</button>
+          </div>
+        </div>
+        <div class="deck" aria-hidden="true"></div>
+      </div>
+      <figcaption>Persistent global navigation, user-defined sections, and a shared application shell.</figcaption>
+    </figure>
+    <div class="arch">
+      <p class="shell">Shared Business Manager framework</p>
+      <ul>
+        {apps.map(([t, d], i) => <li class={i === 2 ? 'hub' : ''}><h3>{t}</h3><p>{d}</p></li>)}
+      </ul>
+    </div>
+    <p class="callout">A consistent platform with the flexibility to work your way.</p>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <p class="eyebrow">Personalized Navigation</p>
+    <h2>Your Workspace. Your Navigation.</h2>
+    <div class="copy wide">
+      <p>Custom Apps gives merchants control over how their workspace is organized.</p>
+      <p>Users can start with a predefined template or build an application from scratch. They can create sections, rename them, and add the pages and modules they use most often.</p>
+      <p>Instead of searching through an application hierarchy every day, users bring their most important tools together. The result is a navigation experience organized around their workflow.</p>
+    </div>
+    <ol class="steps3">
+      {states.map(([n, t, d]) => <li><span class="num">{n}</span><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+    <div class="pairwide">
+      <figure>
+        <img src={img('ca-states')} alt="Navigation item states: default, hover, pressed, active, active pressed" loading="lazy" />
+        <figcaption><strong>Every navigation item has defined states</strong></figcaption>
+      </figure>
+      <div class="released">
+        <p class="tag">Available today</p>
+        <ul>{released.map((r) => <li>{r}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <p class="eyebrow">Unified Discovery</p>
+    <h2>Finding What You Need, Instantly</h2>
+    <div class="copy wide">
+      <p>Personalized navigation solves part of the problem, but users still need access to tools outside their everyday workflows.</p>
+      <p>Rather than adding more navigation depth, we introduced unified module search. Users can search across Merchant Tools and Administration from one place, open a module directly, then add it to their custom navigation when it becomes part of their regular workflow.</p>
+      <p>This connects quick discovery with long-term personalization.</p>
+    </div>
+    <figure class="frame">
+      <img src={img('ca-search')} alt="Unified module search for &quot;prom&quot; showing modules from Merchant Tools and Administration, plus product and promotion records" loading="lazy" />
+      <figcaption>Unified module search across Merchant Tools and Administration.</figcaption>
+    </figure>
+    <ol class="steps3 linked">
+      {discover.map(([n, t, d]) => <li><span class="num">{n}</span><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+    <p class="callout">Search helps users find a tool. Custom Apps help them keep it within reach.</p>
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <p class="eyebrow">Validating the Direction</p>
+    <h2>Putting the Vision in Front of Customers</h2>
+    <div class="split2 rev">
+      <div>
+        <div class="copy">
+          <p>A framework this fundamental needed validation beyond internal design reviews.</p>
+          <p>We brought the vision to a full-day customer workshop in Amsterdam, engaging 15 e-commerce industry leaders representing 13 strategic customers across EMEA.</p>
+          <p>The workshop let us discuss the proposed experience directly with the people managing complex commerce operations, and brought customer perspectives into the conversation as we shaped the framework.</p>
+        </div>
+        <ul class="metrics">
+          <li><span class="big"><span class="count" data-to="15">15</span></span><span class="cap">E-commerce industry leaders.</span></li>
+          <li><span class="big"><span class="count" data-to="13">13</span></span><span class="cap">Strategic customers represented.</span></li>
+        </ul>
+      </div>
+      <figure class="shot"><img src={img('ca-workshop')} alt="Customer workshop participants reviewing future investments on a wall" loading="lazy" /><figcaption>Customer workshop, Amsterdam.</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="sec">
+    <p class="eyebrow">My Contribution</p>
+    <h2>Creating a Shared Direction for Business Manager</h2>
+    <div class="copy wide">
+      <p>As Principal Product Designer, I led the UX vision and framework strategy for this next phase of Business Manager.</p>
+      <p>My focus was on the underlying usability challenges through a scalable experience architecture, not isolated feature improvements. That meant aligning navigation, information architecture, design-system patterns, and the needs of multiple product teams.</p>
+      <p>I also led cross-cloud navigation discussions to evaluate alternative patterns and establish consistent principles for the framework.</p>
+      <p>The result was a shared direction teams could build on as Business Manager continued to evolve.</p>
+    </div>
+    <ol class="levels">
+      {levels.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+    <ul class="three">
+      {lead.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 09 -->
+  <section class="sec">
+    <p class="eyebrow">The Impact</p>
+    <h2>A New Foundation for Business Manager</h2>
+    <div class="copy wide">
+      <p>The Custom Apps vision established the direction for a more adaptable Business Manager experience.</p>
+      <p>In 2026, the framework began delivering that vision through personalized applications, configurable navigation, unified module search, and an updated application shell.</p>
+      <p>These capabilities give users more control over how they organize and access their tools, and set a foundation for future job-centered workspaces.</p>
+    </div>
+    <div class="vd">
+      <div><p class="tag">Vision</p><p>A flexible system combining personalized applications, global search, and contextual workspaces.</p></div>
+      <div class="on"><p class="tag">Delivered</p><p>Custom Apps, editable navigation sections, module search, and shared application navigation.</p></div>
+    </div>
+    <ul class="four out">
+      {outcomes.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 10 -->
+  <section class="sec full">
+    <p class="eyebrow">The Road Ahead</p>
+    <h2>Building Around the Work Itself</h2>
+    <div class="copy wide">
+      <p>Custom Apps establishes the foundation, but personalized navigation is only the beginning. The larger vision is to organize Business Manager around the jobs merchants need to accomplish.</p>
+      <p>That means workspaces combining relevant tools, contextual information, insights, and intelligent assistance in one place, so merchants can see what needs attention, act on recommendations, and move between related tasks without losing context.</p>
+    </div>
+    <figure class="frame">
+      <img src={img('ca-road-ahead')} alt="A custom app home page surrounded by upcoming directions: custom app templates, customizable home pages, a finalized jobs-to-be-done framework, and improved channel management" loading="lazy" />
+    </figure>
+    <ul class="three">
+      {next.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 11 -->
+  <section class="sec last">
+    <p class="eyebrow">What I Learned</p>
+    <h2>The Best Frameworks Make Complexity Feel Simple</h2>
+    <div class="copy wide">
+      <p>Enterprise usability requires more than simplifying individual screens. It requires understanding how people work across the entire product.</p>
+      <p>By rethinking the application framework, we created opportunities to improve navigation, consistency, and flexibility at the platform level.</p>
+      <p>The most meaningful design decisions often happen before a user reaches the page they’re trying to use.</p>
+    </div>
+    <blockquote>Great enterprise experiences adapt to how people work.</blockquote>
+  </section>
+
+  <dialog class="lb" aria-label="Enlarged image">
+    <img alt="" />
+    <button type="button" class="nav prev" aria-label="Previous image">&larr;</button>
+    <button type="button" class="nav next" aria-label="Next image">&rarr;</button>
+  </dialog>
+</div>
+
+<script>
+  const lb = document.querySelector<HTMLDialogElement>('.ca .lb')!;
+  const big = lb.querySelector('img')!;
+  const prev = lb.querySelector<HTMLButtonElement>('.prev')!;
+  const next = lb.querySelector<HTMLButtonElement>('.next')!;
+  let group: HTMLImageElement[] = [];
+  let at = 0;
+  const show = (i: number) => {
+    at = (i + group.length) % group.length;
+    const im = group[at];
+    big.src = im.currentSrc || im.src;
+    big.alt = im.alt;
+    prev.hidden = next.hidden = group.length < 2;
+  };
+  document.querySelectorAll<HTMLImageElement>('.ca section img, .gallery img').forEach((im) => {
+    im.tabIndex = 0;
+    im.style.cursor = 'zoom-in';
+    im.setAttribute('role', 'button');
+    im.setAttribute('aria-label', `Enlarge: ${im.alt}`);
+    const open = () => {
+      const scope = im.closest('section, .gallery')!;
+      group = [...scope.querySelectorAll<HTMLImageElement>('img')];
+      show(group.indexOf(im));
+      lb.showModal();
+    };
+    im.addEventListener('click', open);
+    im.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+  prev.addEventListener('click', (e) => { e.stopPropagation(); show(at - 1); });
+  next.addEventListener('click', (e) => { e.stopPropagation(); show(at + 1); });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(at - 1);
+    if (e.key === 'ArrowRight') show(at + 1);
+  });
+  lb.addEventListener('click', () => lb.close());
+
+  // Metrics count up when they scroll into view.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Clips: muted, looping, pausable; they only play on screen, and not at all with reduced motion.
+  document.querySelectorAll<HTMLElement>('.ca .vid').forEach((box) => {
+    const v = box.querySelector('video')!;
+    const btn = box.querySelector<HTMLButtonElement>('.pp')!;
+    let manual = reduce;
+    const sync = () => { btn.textContent = v.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-label', v.paused ? 'Play animation' : 'Pause animation'); };
+    btn.addEventListener('click', () => { manual = !v.paused; v.paused ? v.play() : v.pause(); sync(); });
+    v.addEventListener('play', sync); v.addEventListener('pause', sync);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => es.forEach((en) => {
+        if (en.isIntersecting && !manual) v.play().catch(() => {});
+        else if (!en.isIntersecting) v.pause();
+      }), { threshold: 0.4 }).observe(v);
+    }
+    sync();
+  });
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        const el = en.target as HTMLElement;
+        const to = Number(el.dataset.to);
+        const t0 = performance.now();
+        const tick = (t: number) => {
+          const k = Math.min((t - t0) / 1400, 1);
+          el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
+          if (k < 1) requestAnimationFrame(tick);
+        };
+        el.textContent = '0';
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.ca .count').forEach((c) => io.observe(c));
+  }
+</script>
+
+<style>
+  .ca { --accent: #7c4dff; }
+  .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+  .sec:first-child { border-top: 0; padding-top: 0; }
+  .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+  .copy p { margin: 0 0 1rem; max-width: 34rem; }
+  .copy.wide { margin-bottom: 4rem; }
+  .copy.wide p { max-width: 46rem; }
+  .full h2 { max-width: none; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; cursor: zoom-in; }
+  figure img { border: 1px solid var(--rule); }
+  figcaption { margin-top: 1rem; color: var(--muted); max-width: 34rem; }
+  figcaption strong { display: block; color: var(--fg); font-weight: 500; }
+  .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }
+  ul, ol { list-style: none; padding: 0; margin: 0; }
+  li p { margin: 0; color: var(--muted); max-width: 22rem; }
+  .user { display: inline-block; margin-bottom: 1rem; padding: 0.15rem 0.7rem; border: 1px solid var(--muted); border-radius: 28px; color: var(--muted); font-size: 0.875rem; }
+  .user.accent { border-color: var(--accent); color: var(--accent); }
+  .tag { margin: 0 0 1rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .cap { display: block; margin: 0.5rem 0 0; color: var(--muted); max-width: 18rem; }
+  .src { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--muted); max-width: 22rem; }
+  .big { display: block; font-size: clamp(3.5rem, 8vw, 7rem); line-height: 1; letter-spacing: -0.05em; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .count { display: inline; }
+  .callout { margin: 5rem 0 0; max-width: 24ch; font-size: clamp(1.5rem, 2.8vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; }
+  .frame { margin-bottom: 3rem; }
+  .laptop { max-width: 62rem; margin: 0 auto; }
+  .frame:has(.laptop) figcaption { max-width: none; }
+  .lid { background: #0d0d0f; border: 2px solid #3a3a3e; border-bottom: 0; border-radius: 1.1rem 1.1rem 0 0; padding: 0.9rem 0.9rem 1rem; }
+  .vid { position: relative; background: #000; border-radius: 0.35rem; overflow: hidden; line-height: 0; }
+  .vid video { width: 100%; height: auto; display: block; }
+  .pp { position: absolute; right: 0.75rem; bottom: 0.75rem; line-height: 1; padding: 0.45rem 0.9rem; border: 0; border-radius: 28px; background: rgba(0, 0, 0, 0.65); color: #fff; font: inherit; font-size: 0.8125rem; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+  .vid:hover .pp, .pp:focus-visible { opacity: 1; }
+  .deck { height: 0.9rem; margin: 0 -3.5%; background: linear-gradient(#d9d9dd, #a9a9ae); border-radius: 0 0 1.2rem 1.2rem; position: relative; }
+  .deck::before { content: ''; position: absolute; left: 50%; top: 0; width: 16%; height: 0.35rem; transform: translateX(-50%); background: #8d8d92; border-radius: 0 0 0.5rem 0.5rem; }
+
+  /* 01, 07 */
+  .split2 { display: grid; grid-template-columns: 5fr 7fr; gap: 3rem 4rem; align-items: start; }
+  .split2.rev { grid-template-columns: 5fr 7fr; }
+  .evidence { display: grid; grid-template-columns: 5fr 7fr; gap: 3rem 4rem; align-items: start; margin-top: 5rem; padding: 3rem; background: var(--chip); }
+  .evidence.one { display: block; margin-top: 4rem; }
+  .quote { margin: 0; font-size: clamp(1.75rem, 3.6vw, 3rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+  .quote cite { display: block; margin-top: 1rem; font-style: normal; font-size: 1rem; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+  .metrics { display: flex; flex-wrap: wrap; gap: 2rem 4rem; margin-top: 3rem; }
+  .metrics .big { font-size: clamp(3rem, 6vw, 5rem); }
+
+  /* 02 */
+  .versus { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+  .versus .mid { margin: 0; max-width: 24ch; font-size: clamp(1.5rem, 2.8vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; }
+  .crop-nav { max-height: 34rem; object-fit: cover; object-position: top left; }
+  @media (min-width: 1000px) {
+    .versus { grid-template-columns: 1fr 1fr; }
+    .versus .mid { grid-column: 1 / -1; grid-row: 1; margin-bottom: 1rem; }
+  }
+
+  /* 03, 09 */
+  .four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3rem; }
+  .four li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .four .num { font-size: clamp(3rem, 5vw, 4.5rem); letter-spacing: -0.04em; line-height: 1; margin-bottom: 1.5rem; }
+  .four p { max-width: 18rem; }
+  .out { margin-top: 5rem; }
+  .out h3 { font-size: 1.25rem; }
+
+  /* 04 */
+  .arch { margin-top: 5rem; }
+  .shell {
+    max-width: none; margin: 0 0 1rem; padding: 1rem 1.5rem; border: 1px solid var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.875rem; text-align: center; }
+  .arch ul { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-top: 1.75rem; }
+  .arch li { position: relative; padding: 1.5rem; border: 1px solid var(--rule); background: var(--chip); }
+  .arch li::before { content: ''; position: absolute; left: 50%; top: -2.75rem; height: 2.75rem; border-left: 2px dashed var(--muted); }
+  .arch li.hub { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .arch li.hub p { color: rgba(255, 255, 255, 0.85); }
+
+  /* 05, 06 */
+  .steps3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .steps3 li { padding: 1.5rem 1.25rem 2rem; background: var(--chip); }
+  .steps3 .num { margin-bottom: 2rem; }
+  .steps3.linked li { background: color-mix(in srgb, var(--accent) 12%, #fff); }
+  .steps3.linked li:not(:last-child)::after { content: ''; }
+  .pairwide { display: grid; grid-template-columns: 8fr 4fr; gap: 3rem; align-items: start; margin-top: 5rem; }
+  .released ul { display: grid; gap: 1rem; }
+  .released li { padding-left: 1rem; border-left: 2px solid var(--accent); }
+
+  /* 08, 10 */
+  .levels { display: grid; gap: 0.75rem; margin-bottom: 4rem; }
+  .levels li { padding: 1.5rem 2rem; border: 1px solid var(--rule); }
+  .levels li:nth-child(2) { margin-left: 2rem; }
+  .levels li:nth-child(3) { margin-left: 4rem; background: var(--accent); border-color: var(--accent); color: #fff; }
+  .levels li:nth-child(3) p { color: rgba(255, 255, 255, 0.85); }
+  .levels p { max-width: 36rem; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+  .three li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+
+  /* 09 vision vs delivered */
+  .vd { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .vd > div { padding: 2rem; border: 1px dashed var(--muted); }
+  .vd > div.on { border: 2px solid var(--accent); }
+  .vd .on .tag { color: var(--accent); }
+  .vd p:last-child { margin: 0; font-size: clamp(1.15rem, 1.9vw, 1.6rem); line-height: 1.2; letter-spacing: -0.03em; }
+
+  /* 11 */
+  .last { padding-bottom: 2rem; }
+  blockquote { margin: 5rem 0 0; max-width: 22ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+  blockquote.quote { margin: 0; max-width: none; font-size: clamp(1.75rem, 3.6vw, 3rem); }
+
+  .lb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+  .lb::backdrop { background: rgba(0, 0, 0, 0.88); }
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+  .nav:hover, .nav:focus-visible { background: #fff; outline: 2px solid var(--accent); }
+  .nav[hidden] { display: none; }
+  .prev { left: 1.5rem; }
+  .next { right: 1.5rem; }
+  .lb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+  h2, figure, .four li, .three li, .steps3 li, .arch, .levels li, .vd > div, .evidence > *, .metrics > *, .callout, blockquote {
+    animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+  @media (max-width: 999px) {
+    .sec { padding: 4.5rem 0; }
+    .split2, .split2.rev, .evidence, .pairwide, .vd, .three, .arch ul { grid-template-columns: 1fr; gap: 2.5rem; }
+    .four, .steps3 { grid-template-columns: 1fr; gap: 2.5rem; }
+    .arch li::before { display: none; }
+    .levels li:nth-child(n) { margin-left: 0; }
+  }
+</style>
