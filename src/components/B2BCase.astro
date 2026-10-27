@@ -1,0 +1,396 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (name: string) => `${base}/images/${name}.webp`;
+
+const ecosystem = [
+  ['Setup', 'Admin', 'Search configuration, indexes, and searchable attributes.', ['Search UI configuration', 'SRP filters', 'Faceted search hierarchy']],
+  ['Management', 'Storefront Manager', 'Search rules, merchandising, ranking, and optimization.', ['Search redirects', 'Dictionaries', 'Promotions', 'Product attributes', 'Indexing + previewing', 'Ranking and sorting rules', 'Featured products and user groups']],
+  ['Experience', 'Buyer', 'Product discovery, filtering, search suggestions, and ordering.', ['Search by SKUs', 'Type ahead and auto-suggest', 'Quick order', 'Fuzzy and semantic search', 'Saved searches and history', 'Facets, sorting, breadcrumbs', 'Featured and recommended products']],
+];
+const roles = [
+  ['01', 'Storefront Admin', 'Creates storefronts and indexes, enables search, and manages permissions.', 'Set Up', 'admin'],
+  ['02', 'Builder / Designer', 'Customizes the storefront UI and search behavior.', 'Build', 'builder'],
+  ['03', 'Storefront Manager', 'Configures search merchandising and optimizes product discovery.', 'Manage', 'manager'],
+  ['04', 'Buyer', 'Searches, filters, and purchases products.', 'Experience', 'buyer'],
+];
+const ia = [
+  ['Index', ['Create and manage indexes', 'Monitor status', 'Schedule updates']],
+  ['Dictionaries', ['Synonyms', 'Suggestions', 'Misspellings']],
+  ['Rules', ['Searchable attributes', 'Sorting', 'Availability', 'Exceptions']],
+  ['Display Settings', ['Facets', 'Pagination', 'Search result presentation']],
+];
+const decisions = [
+  ['Search by SKU', 'Support buyers who know the exact products they need.'],
+  ['Relevant Suggestions', 'Help shoppers find products through intelligent search interactions.'],
+  ['Account-Specific Pricing', 'Present negotiated prices associated with the buyer’s account.'],
+];
+const config = [
+  ['Configure', 'Define which attributes and product data participate in search.'],
+  ['Merchandise', 'Control ranking and product visibility.'],
+  ['Maintain', 'Manage indexes and search configuration over time.'],
+];
+const builder = [
+  ['Configurable Components', 'Adapt commerce interfaces to business needs.'],
+  ['Extensible Architecture', 'Support custom components and themes.'],
+];
+const lead = [
+  ['Research & Problem Definition', 'Identified customer pain points and mapped the broader search ecosystem.'],
+  ['Experience Strategy', 'Defined a coherent approach across multiple personas and workflows.'],
+  ['Information Architecture', 'Organized complex search capabilities into understandable product areas.'],
+  ['Product Design', 'Connected administrative configuration with buyer-facing discovery.'],
+];
+---
+<div class="b2b">
+  <!-- 01 -->
+  <section class="sec">
+    <p class="eyebrow">The Problem</p>
+    <h2>B2B Shopping Isn’t Consumer Shopping</h2>
+    <div class="copy wide">
+      <p>Business buyers aren’t casually browsing products.</p>
+      <p>They’re searching large catalogs, working from spreadsheets, comparing prices, and placing recurring orders.</p>
+      <p>They often know exactly what they need, down to the SKU or item number.</p>
+      <p>But finding the right product is only half the challenge.</p>
+      <p>Behind every search experience are administrators and merchandisers responsible for configuring product data, relevance, and storefront behavior.</p>
+      <p>Improving search meant designing for both sides of the experience.</p>
+    </div>
+    <div class="versus">
+      <figure><img src={img('b2b-sku')} alt="Buyer search: typing a SKU shows matching categories and products with quantity and add to cart" loading="lazy" /><figcaption><strong>The Buyer</strong>SKU search, product results, quick ordering.</figcaption></figure>
+      <div class="link" aria-hidden="true"><i></i></div>
+      <figure><img src={img('b2b-attributes')} alt="Merchant configuration: adding searchable attributes in search settings" loading="lazy" /><figcaption><strong>The Merchant</strong>Searchable attributes, search settings, relevance controls.</figcaption></figure>
+    </div>
+    <p class="callout">One search experience. Very different needs.</p>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <p class="eyebrow">Understanding the Ecosystem</p>
+    <h2>One Search Experience. Three Different Needs.</h2>
+    <div class="copy wide">
+      <p>Through customer interviews and research, I identified how different roles interact with commerce search.</p>
+      <p>Administrators configure the system.</p>
+      <p>Merchandisers manage relevance and product visibility.</p>
+      <p>Buyers depend on accurate results to find and purchase the right products.</p>
+      <p>The common challenge was search relevance, but each role influenced it in a different way.</p>
+      <p>I mapped these workflows to understand how the entire experience needed to work together.</p>
+    </div>
+    <ol class="eco">
+      {ecosystem.map(([t, who, d, items], i) => (
+        <li>
+          <span class="num">0{i + 1} · {who}</span>
+          <h3>{t}</h3>
+          <p class="lead">{d}</p>
+          <ul>{items.map((x) => <li>{x}</li>)}</ul>
+        </li>
+      ))}
+    </ol>
+    <figure class="frame"><img src={img('b2b-map')} alt="Original experience map: search as a service and search as an experience, across keyword search, search results, navigation, and discovery" loading="lazy" /><figcaption>The original experience map. Select to expand.</figcaption></figure>
+    <p class="callout">Search relevance is shaped long before a buyer enters a query.</p>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <p class="eyebrow">The UX Strategy</p>
+    <h2>Designing for Everyone Behind the Search</h2>
+    <div class="copy wide">
+      <p>The research revealed four distinct user roles, each with different goals and responsibilities.</p>
+      <p>Instead of designing one generic search management experience, I organized the product strategy around their workflows.</p>
+      <p>This helped establish which capabilities belonged in setup, which belonged in management, and which needed to appear in the buyer-facing storefront.</p>
+    </div>
+    <ol class="roles">
+      {roles.map(([n, t, d, s, k]) => (
+        <li>
+          <svg class="ico" viewBox="0 0 48 48" aria-hidden="true">
+            {k === 'admin' && <g><rect x="12" y="8" width="24" height="32" rx="2" /><path d="M18 20l3 3 6-6M18 32h12" /></g>}
+            {k === 'builder' && <g><rect x="6" y="10" width="36" height="28" rx="2" /><path d="M20 19l-5 5 5 5M28 19l5 5-5 5" /></g>}
+            {k === 'manager' && <g><path d="M8 14h20l12 12-14 14L8 28z" /><circle cx="16" cy="21" r="2" /></g>}
+            {k === 'buyer' && <g><circle cx="24" cy="18" r="8" /><path d="M10 40c2-9 8-12 14-12s12 3 14 12" /></g>}
+          </svg>
+          <span class="num">{n}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+          <span class="stage">{s}</span>
+        </li>
+      ))}
+    </ol>
+    <ol class="flow" aria-label="Set Up, Build, Manage, Experience">
+      <li>Set Up</li><li>Build</li><li>Manage</li><li>Experience</li>
+    </ol>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <p class="eyebrow">The Experience Architecture</p>
+    <h2>Making a Complex System Manageable</h2>
+    <div class="copy wide">
+      <p>An effective search experience requires more than a good search bar.</p>
+      <p>The system needs to support indexing, dictionaries, ranking rules, searchable attributes, and result display settings.</p>
+      <p>These capabilities are deeply interconnected, but users shouldn’t need to understand the underlying technical architecture to complete their work.</p>
+      <p>I organized the management experience into clearer functional areas, creating a foundation for configuring and maintaining commerce search.</p>
+    </div>
+    <div class="iabar">CRM Search</div>
+    <ol class="ia">
+      {ia.map(([t, items]) => (
+        <li><h3>{t}</h3><ul>{items.map((x) => <li>{x}</li>)}</ul></li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <p class="eyebrow">Intelligent Product Discovery</p>
+    <h2>Helping Buyers Find What They Need, Faster</h2>
+    <div class="copy wide">
+      <p>B2B buyers often know exactly what they’re looking for.</p>
+      <p>They search using SKUs, item numbers, and product attributes, and frequently reorder products they’ve purchased before.</p>
+      <p>We designed the search experience around these behaviors, prioritizing relevant results and efficient purchasing.</p>
+      <p>The storefront also supports account-specific negotiated pricing, helping buyers access the prices associated with their business agreements.</p>
+    </div>
+    <figure class="frame"><img src={img('b2b-cart')} alt="Search results grid with product names, SKUs, and account prices" loading="lazy" /></figure>
+    <ul class="three">
+      {decisions.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+    <figure class="frame sup"><img src={img('b2b-pages')} alt="Search flow diagram connecting search to category pages, search results, product details, and related content" loading="lazy" /><figcaption>How search connects buyers to category pages, results, product details, and related content.</figcaption></figure>
+  </section>
+
+  <!-- 06 -->
+  <section class="sec">
+    <p class="eyebrow">Merchandising &amp; Control</p>
+    <h2>Relevance Doesn’t Happen by Accident</h2>
+    <div class="copy wide">
+      <p>Great search results depend on the tools behind them.</p>
+      <p>Merchandisers and administrators need control over which products are searchable, how results are ranked, and how customers navigate large catalogs.</p>
+      <p>We designed configuration experiences that bring these capabilities together, giving teams a clearer way to manage and optimize search.</p>
+      <p>The goal was to make sophisticated search functionality accessible without requiring users to manage it through disconnected technical processes.</p>
+    </div>
+    <figure class="frame"><img src={img('b2b-attributes')} alt="Adding searchable attributes in search configuration" loading="lazy" /></figure>
+    <div class="support">
+      <figure><img src={img('b2b-store')} alt="Store details with search status at the top" loading="lazy" /></figure>
+      <figure><img src={img('b2b-facets')} alt="Choosing a facet type" loading="lazy" /></figure>
+      <figure><img src={img('b2b-reorder')} alt="Reordering facets" loading="lazy" /></figure>
+    </div>
+    <ul class="three">
+      {config.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <p class="eyebrow">Customizable Storefronts</p>
+    <h2>One Platform. Different Storefronts.</h2>
+    <div class="copy wide">
+      <p>Every B2B business has different requirements.</p>
+      <p>The search experience needed to support customization without forcing every customer to build from scratch.</p>
+      <p>Experience Builder provided configurable commerce components that teams could adapt to their storefront.</p>
+      <p>Developers could extend the experience through custom components and themes.</p>
+      <p>This created a foundation for delivering tailored buyer experiences within a shared platform.</p>
+    </div>
+    <div class="pair">
+      <figure><img src={img('b2b-builder')} alt="Experience Builder interface" loading="lazy" /><figcaption><strong>The Builder</strong></figcaption></figure>
+      <figure><img src={img('b2b-srp')} alt="The configured storefront search results page" loading="lazy" /><figcaption><strong>The Result</strong></figcaption></figure>
+    </div>
+    <ul class="three two">
+      {builder.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 08 -->
+  <section class="sec">
+    <p class="eyebrow">My Contribution</p>
+    <h2>Connecting Research, Strategy, and Execution</h2>
+    <div class="copy wide">
+      <p>As lead designer, I was responsible for the concept and UX strategy for Commerce Search.</p>
+      <p>I conducted customer research, mapped the needs of different personas, and developed the experience architecture connecting setup, management, and buyer-facing search.</p>
+      <p>My focus was on creating a cohesive experience across roles that often have different priorities but depend on the same underlying system.</p>
+      <p>The work required balancing technical complexity, merchandising control, storefront flexibility, and buyer usability.</p>
+    </div>
+    <ol class="trail">
+      <li><figure><img src={img('b2b-map')} alt="Research: the original experience map" loading="lazy" /></figure><span class="num">Research</span></li>
+      <li class="arrow" aria-hidden="true">&rarr;</li>
+      <li><figure><img src={img('b2b-personas')} alt="Strategy: persona workflows" loading="lazy" /></figure><span class="num">Strategy</span></li>
+      <li class="arrow" aria-hidden="true">&rarr;</li>
+      <li><figure><img src={img('b2b-srp')} alt="Product: the search experience" loading="lazy" /></figure><span class="num">Product</span></li>
+    </ol>
+    <ul class="four">
+      {lead.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+  </section>
+
+  <!-- 09 -->
+  <section class="sec">
+    <p class="eyebrow">The Future Opportunity</p>
+    <h2>From Search Data to Smarter Decisions</h2>
+    <div class="copy wide">
+      <p>Search generates valuable signals about what customers need, what they’re finding, and where the experience can improve.</p>
+      <p>The next opportunity was to turn those signals into actionable insights.</p>
+      <p>We explored how Salesforce Einstein AI could help merchants understand search performance and inform decisions about products and merchandising.</p>
+      <p>The vision extended beyond helping buyers find products.</p>
+      <p>It explored how search intelligence could help businesses improve the experience itself.</p>
+    </div>
+    <figure class="frame"><span class="tag">Forward-Looking Concept</span><img src={img('b2b-analytics')} alt="Concept: search analytics and insights for merchants" loading="lazy" /></figure>
+  </section>
+
+  <!-- 10 -->
+  <section class="sec last">
+    <p class="eyebrow">What I Learned</p>
+    <h2>Great Search Is a System That Connects the Entire Experience</h2>
+    <div class="copy wide">
+      <p>The biggest lesson from this project was that the quality of a buyer’s experience depends on the tools and decisions behind it.</p>
+      <p>Search relevance isn’t determined by the search interface alone.</p>
+      <p>It’s shaped by how product data is configured, how results are managed, and how businesses adapt the storefront to their needs.</p>
+      <p>By designing these experiences together, we created a more coherent product vision that connected technical capabilities with real customer workflows.</p>
+    </div>
+    <blockquote>The best enterprise experiences make complex systems feel intuitive to everyone who uses them.</blockquote>
+  </section>
+
+  <dialog class="lb" aria-label="Enlarged image">
+    <img alt="" />
+    <button type="button" class="nav prev" aria-label="Previous image">&larr;</button>
+    <button type="button" class="nav next" aria-label="Next image">&rarr;</button>
+  </dialog>
+</div>
+
+<script>
+  const root = document.querySelector('.b2b');
+  if (root) {
+    const lb = root.querySelector<HTMLDialogElement>('.lb')!;
+    const big = lb.querySelector('img')!;
+    const prev = lb.querySelector<HTMLButtonElement>('.prev')!;
+    const next = lb.querySelector<HTMLButtonElement>('.next')!;
+    let group: HTMLImageElement[] = [];
+    let at = 0;
+    const show = (i: number) => {
+      at = (i + group.length) % group.length;
+      const im = group[at];
+      big.src = im.currentSrc || im.src;
+      big.alt = im.alt;
+      prev.hidden = next.hidden = group.length < 2;
+    };
+    root.querySelectorAll<HTMLImageElement>('section img').forEach((im) => {
+      im.tabIndex = 0;
+      im.setAttribute('role', 'button');
+      im.setAttribute('aria-label', `Enlarge: ${im.alt}`);
+      const open = () => {
+        group = [...im.closest('section')!.querySelectorAll<HTMLImageElement>('img')];
+        show(group.indexOf(im));
+        lb.showModal();
+      };
+      im.addEventListener('click', open);
+      im.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+    prev.addEventListener('click', (e) => { e.stopPropagation(); show(at - 1); });
+    next.addEventListener('click', (e) => { e.stopPropagation(); show(at + 1); });
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+    lb.addEventListener('click', () => lb.close());
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    root.querySelectorAll<HTMLElement>('.vid').forEach((box) => {
+      const v = box.querySelector('video')!;
+      const btn = box.querySelector<HTMLButtonElement>('.pp')!;
+      let manual = reduce;
+      const sync = () => { btn.textContent = v.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-label', v.paused ? 'Play animation' : 'Pause animation'); };
+      btn.addEventListener('click', () => { manual = !v.paused; v.paused ? v.play() : v.pause(); sync(); });
+      v.addEventListener('play', sync); v.addEventListener('pause', sync);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((es) => es.forEach((en) => {
+          if (en.isIntersecting && !manual) v.play().catch(() => {});
+          else if (!en.isIntersecting) v.pause();
+        }), { threshold: 0.4 }).observe(v);
+      }
+      sync();
+    });
+  }
+</script>
+
+<style>
+  .b2b { --accent: #53698d; }
+  .hero { padding: 0 0 7rem; }
+  .big { max-width: 14ch; font-size: clamp(2.75rem, 6.4vw, 5.5rem); }
+  .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+  .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+  .copy p { margin: 0 0 1rem; max-width: 34rem; }
+  .copy.wide { margin-bottom: 4rem; }
+  .copy.wide p { max-width: 46rem; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; cursor: zoom-in; }
+  figure img { border: 1px solid var(--rule); }
+  figcaption, .cap { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+  figcaption strong { display: block; margin-bottom: 0.25rem; color: var(--fg); font-size: 1.1rem; font-weight: 500; letter-spacing: -0.02em; }
+  .num { display: block; margin: 0 0 0.75rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  ul, ol { list-style: none; padding: 0; margin: 0; }
+  li p { margin: 0; color: var(--muted); max-width: 22rem; }
+  .callout { margin: 4rem 0 0; max-width: 24ch; font-size: clamp(1.5rem, 2.8vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; }
+
+  .vid { position: relative; }
+  .vid video { display: block; width: 100%; height: auto; background: var(--chip); }
+  .pp { position: absolute; right: 1rem; bottom: 1rem; padding: 0.4rem 0.9rem; border: 0; border-radius: 20px; background: rgba(0, 0, 0, 0.7); color: #fff; font: inherit; font-size: 0.875rem; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+  .vid:hover .pp, .pp:focus-visible { opacity: 1; }
+
+  .versus { display: grid; grid-template-columns: 1fr 4rem 1fr; align-items: center; }
+  .link { display: grid; place-items: center; }
+  .link i { display: block; width: 100%; border-top: 2px dashed var(--accent); }
+  .eco { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem; }
+  .eco > li { padding-top: 1.5rem; border-top: 2px solid var(--accent); }
+  .eco h3 { font-size: clamp(1.75rem, 3.2vw, 2.75rem); letter-spacing: -0.04em; }
+  .eco .lead { margin-bottom: 1.5rem; color: var(--fg); }
+  .eco ul li { padding: 0.55rem 0; border-top: 1px solid var(--rule); color: var(--muted); }
+  .frame { position: relative; }
+  .frame.sup { margin-top: 5rem; }
+  .frame img { background: #fff; }
+  .tag { position: absolute; top: 1rem; left: 1rem; z-index: 1; padding: 0.3rem 0.8rem; border-radius: 20px; background: var(--accent); color: #fff; font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .roles li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .ico { width: 2.75rem; height: 2.75rem; margin-bottom: 1.25rem; fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .stage { display: inline-block; margin-top: 1.25rem; padding: 0.25rem 0.8rem; border: 1px solid var(--accent); border-radius: 20px; color: var(--accent); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .flow { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 4rem; gap: 2rem; }
+  .flow li { position: relative; padding: 1rem 0; border-top: 2px solid var(--accent); font-size: clamp(1.25rem, 2.2vw, 1.9rem); letter-spacing: -0.03em; font-weight: 500; }
+  .flow li:not(:last-child)::after { content: '\2192'; position: absolute; right: 0; top: 0.8rem; color: var(--accent); }
+
+  .iabar { padding: 1rem; margin-bottom: 1.5rem; border-radius: 6px; background: color-mix(in srgb, var(--accent) 28%, var(--chip)); text-align: center; color: var(--fg); font-weight: 500; }
+  .ia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .ia h3 { display: grid; place-items: center; min-height: 6rem; margin-bottom: 1.5rem; border-radius: 6px; background: var(--accent); color: #fff; text-align: center; }
+  .ia ul li { padding: 0.6rem 0; border-top: 1px solid var(--rule); }
+
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem; }
+  .three.two { grid-template-columns: repeat(2, 1fr); }
+  .three li, .four li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 5rem; }
+  .support { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .trail { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 1.5rem; align-items: center; }
+  .trail .num { margin: 0.75rem 0 0; }
+  .trail .arrow { color: var(--accent); font-size: 2rem; }
+
+  .last { padding-bottom: 2rem; }
+  blockquote { margin: 5rem 0 0; max-width: 22ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+
+  .lb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+  .lb::backdrop { background: rgba(0, 0, 0, 0.88); }
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+  .nav:hover, .nav:focus-visible { background: #fff; outline: 2px solid var(--accent); }
+  .nav[hidden] { display: none; }
+  .prev { left: 1.5rem; }
+  .next { right: 1.5rem; }
+  .lb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+  h2, figure, .vid, .three li, .four li, .eco > li, .roles li, .flow li, .ia li, .callout, blockquote {
+    animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+  @media (max-width: 999px) {
+    .sec { padding: 4.5rem 0; }
+    .hero { padding-bottom: 4.5rem; }
+    .versus, .eco, .roles, .flow, .ia, .three, .three.two, .four, .support, .pair, .trail { grid-template-columns: 1fr; gap: 2.5rem; }
+    .link { display: none; }
+    .trail .arrow { display: none; }
+    .flow li:not(:last-child)::after { content: '\2193'; }
+    .pp { opacity: 1; }
+  }
+</style>

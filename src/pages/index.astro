@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar'];
+const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar', 'ello', 'blue-coat', 'photobucket'];
 // Email is shipped base64-encoded and assembled in the browser, so scrapers reading raw HTML never see it.
 const emailToken = Buffer.from('karen.utera@gmail.com').toString('base64');
 // Wall position keeps an older project's former date, so changing a shown year doesn't reshuffle the wall.
@@ -20,10 +20,10 @@ const focus = { 'roadster-1': 'right center' };
 // Freelance banners from the old Squarespace gallery. Titles are guessed from the file names, edit freely.
 const cover = { clippit: '/images/664169-banner3-clippit.jpg' };
 const freelance = [
-  ['Ello', '5dbae5-banner3-ello.jpg', 2007],
-  ['Photobucket', '4713ce-1-pb.png', 2010],
-  ['Blue Coat', 'a8ddd9-banner1-bc.jpg', 2009],
-].map(([title, file, year]) => ({ title, year, image: `/images/${file}` }));
+  ['Ello', '5dbae5-banner3-ello.jpg', 2007, 'ello'],
+  ['Photobucket', '4713ce-1-pb.png', 2010, 'photobucket'],
+  ['Blue Coat', 'a8ddd9-banner1-bc.jpg', 2009, 'blue-coat'],
+].map(([title, file, year, id]) => ({ id, title, year, image: `/images/${file}` }));
 
 const wall = projects
   .filter((p) => !seen.has(p.data.title) && seen.add(p.data.title))

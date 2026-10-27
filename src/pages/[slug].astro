@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import RoadsterCase from '../components/RoadsterCase.astro';
 import CustomAppsCase from '../components/CustomAppsCase.astro';
 import TrueCarCase from '../components/TrueCarCase.astro';
+import B2BCase from '../components/B2BCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
 import '../styles/commerce-case.css';
 import '../styles/studio-case.css';
@@ -42,8 +43,9 @@ const gallery = gallerySrc.map((g: any) => {
   const item = typeof g === 'string' ? { src: g } : g;
   return { ...item, url: meta ? privateAssets[`${dir}/${item.src}`] : base + item.src };
 });
-const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : Private ?? null;
-const facts = meta?.facts ?? page.data.facts;
+const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : page.id === 'b2b-commerce' ? B2BCase : Private ?? null;
+const rawFacts = meta?.facts ?? page.data.facts;
+const facts = rawFacts && !rawFacts.some((f: any) => /^year$/i.test(f.label)) ? [...rawFacts, { label: 'Year', value: String(page.data.year ?? date.getFullYear()) }] : rawFacts;
 const hasCase = gated || !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
 const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="${g.url}"]`).join(',');
 ---
@@ -81,7 +83,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
         )}
         {hasCase && <a class="pill" href="#case-study">View Case Study</a>}
       </aside>
-      <div class="gallery">
+      <div class:list={['gallery', { centered: page.id === 'b2b-commerce' }]}>
         {gallery.map((g: any) => g.caption
           ? <figure>{g.src.endsWith('.mp4')
               ? <video src={g.url} aria-label={g.caption} muted loop playsinline autoplay preload="auto"></video>
@@ -92,6 +94,13 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     )}
     {hasCase && Custom && <section id="case-study" class="custom"><Custom /></section>}
     {hasCase && !Custom && !gated && <section id="case-study" class="prose"><Content /></section>}
+    {hasCase && !Custom && !gated && (
+      <dialog class="plb" aria-label="Enlarged image">
+        <img alt="" />
+        <button type="button" class="nav prev" aria-label="Previous image">&larr;</button>
+        <button type="button" class="nav next" aria-label="Next image">&rarr;</button>
+      </dialog>
+    )}
     {Private && <Fragment set:html={'<!--gate:end-->'} />}
     </div>
     {gated && (
@@ -155,6 +164,33 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
   </script>}
 
   <script is:inline>
+    // Images in a plain case study open in a lightbox.
+    (() => {
+      const lb = document.querySelector('.plb');
+      if (!lb) return;
+      const big = lb.querySelector('img'), prev = lb.querySelector('.prev'), next = lb.querySelector('.next');
+      const imgs = [...document.querySelectorAll('.prose img')];
+      let at = 0;
+      const show = (i) => {
+        at = (i + imgs.length) % imgs.length;
+        big.src = imgs[at].currentSrc || imgs[at].src;
+        big.alt = imgs[at].alt;
+        prev.hidden = next.hidden = imgs.length < 2;
+      };
+      imgs.forEach((im, i) => {
+        im.tabIndex = 0;
+        im.style.cursor = 'zoom-in';
+        im.setAttribute('role', 'button');
+        im.setAttribute('aria-label', `Enlarge: ${im.alt || 'image'}`);
+        const open = () => { show(i); lb.showModal(); };
+        im.addEventListener('click', open);
+        im.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+      });
+      prev.addEventListener('click', (e) => { e.stopPropagation(); show(at - 1); });
+      next.addEventListener('click', (e) => { e.stopPropagation(); show(at + 1); });
+      lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') show(at - 1); if (e.key === 'ArrowRight') show(at + 1); });
+      lb.addEventListener('click', () => lb.close());
+    })();
     // The big title drifts left as the page scrolls down.
     // Hero clip stays still for reduced-motion visitors.
     const still = () => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('.gallery video').forEach((v) => { v.pause(); v.controls = true; }); };
@@ -208,6 +244,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .gallery figure { margin: 0; }
     .gallery video { width: 100%; height: auto; display: block; }
     .gallery figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+    .gallery.centered figcaption { text-align: center; }
     #gate { max-width: 26rem; margin: 6rem 0 8rem; }
     #gate label { display: block; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
     #gate .hint { margin: 0.5rem 0 1.5rem; color: var(--muted); }
@@ -223,7 +260,18 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .prose > :global(h1:first-child), .prose > :global(h1:first-child + h3) { display: none; }
     .prose :global(h1) { font-size: clamp(1.75rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; margin: 5rem 0 1.5rem; }
     .prose :global(h3) { font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.35; letter-spacing: -0.02em; font-weight: 400; max-width: 46rem; }
+    .prose :global(.band) { background: var(--chip); padding: 1px 3rem 3rem; margin: 5rem 0 0; }
+    .prose :global(.band h1) { margin-top: 3rem; }
     .prose :global(img) { width: 100%; margin: 2rem 0; border-radius: 0; }
+
+    .plb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+    .plb::backdrop { background: rgba(0, 0, 0, 0.88); }
+    .plb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; border-radius: 0; }
+    .plb .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+    .plb .nav:hover, .plb .nav:focus-visible { background: #fff; outline: 2px solid #000; }
+    .plb .nav[hidden] { display: none; }
+    .plb .prev { left: 1.5rem; }
+    .plb .next { right: 1.5rem; }
 
     /* Entrance motion: details slide in, gallery and case study rise as they arrive. */
     @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
