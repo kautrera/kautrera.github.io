@@ -20,17 +20,17 @@ const focus = { 'roadster-1': 'right center' };
 // Freelance banners from the old Squarespace gallery. Titles are guessed from the file names, edit freely.
 const cover = { clippit: '/images/664169-banner3-clippit.jpg' };
 const freelance = [
-  ['Ello', '5dbae5-banner3-ello.jpg'],
-  ['Photobucket', '4713ce-1-pb.png'],
-  ['Blue Coat', 'a8ddd9-banner1-bc.jpg'],
-].map(([title, file]) => ({ title, year: 2019, image: `/images/${file}` }));
+  ['Ello', '5dbae5-banner3-ello.jpg', 2007],
+  ['Photobucket', '4713ce-1-pb.png', 2010],
+  ['Blue Coat', 'a8ddd9-banner1-bc.jpg', 2009],
+].map(([title, file, year]) => ({ title, year, image: `/images/${file}` }));
 
 const wall = projects
   .filter((p) => !seen.has(p.data.title) && seen.add(p.data.title))
   .map((p) => ({
     id: p.id,
     title: p.data.title,
-    year: p.data.date.getFullYear(),
+    year: p.data.year ?? p.data.date.getFullYear(),
     focus: focus[p.id],
     // Animated GIFs get a static `-still.png` next to them for the wall.
     image: cover[p.id] ?? p.body?.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/)?.[1]?.replace(/\.gif$/, '-still.png'),
@@ -46,7 +46,7 @@ wall.sort((a, b) => rank(a) - rank(b));
 const current = [
   { id: 'custom-apps', title: 'Custom Apps', image: '/images/custom-apps.webp' },
   { id: 'bm-ux-studio', title: 'BM UX Studio', image: '/images/bm-ux-studio.webp' },
-  'Commerce D2C',
+  { title: 'Commerce D2C', year: 2022 },
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
   'Page Designer',
   'Visual Merchandising',

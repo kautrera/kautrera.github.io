@@ -1,6 +1,7 @@
 ---
 title: "B2B Commerce"
 date: 2021-07-01
+year: 2018
 draft: false
 ---
 
