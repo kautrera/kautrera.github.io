@@ -50,8 +50,8 @@ const current = [
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
   'Page Designer',
   { title: 'Visual Merchandising', year: 2025 },
-  'Catalog Enrichment',
-].map((c, i) => ({ ...(typeof c === 'string' ? { title: c } : c), tone: i % 4 }));
+  { title: 'Catalog Enrichment', tone: 3 },
+].map((c, i) => ({ tone: i % 4, ...(typeof c === 'string' ? { title: c } : c) }));
 
 const tiles = [];
 for (let i = 0; i < Math.max(current.length, wall.length); i++) {
