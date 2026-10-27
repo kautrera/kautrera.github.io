@@ -84,6 +84,10 @@ const i1 = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
 const j1 = tiles.findIndex((t) => t.id === 'b2b-commerce');
 if (i1 > -1 && j1 > -1) [tiles[i1], tiles[j1]] = [tiles[j1], tiles[i1]];
 
+// Palette takes Visual Merchandising's slot; everything from there shifts one place right.
+const vm = tiles.findIndex((t) => t.title === 'Visual Merchandising');
+if (vm > -1) tiles.splice(vm, 0, { title: 'Palette', year: 2026, tone: (tiles[vm].tone + 1) % 4 });
+
 // Placeholder copy, edit freely.
 const audiences = [
   { id: 'anyone', label: 'For anyone', text: 'Hi there, I’m Karen, a product designer who cares about creating tools people enjoy using.' },
