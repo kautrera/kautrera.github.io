@@ -23,6 +23,10 @@ const { page } = Astro.props;
 const { Content } = await render(page);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { title, date, role, tools } = page.data;
+// Same order as the wall, so "Next project" walks the tiles left to right.
+const tour = ['custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'clippit', 'photobucket', 'ello', 'blue-coat'];
+const at = tour.indexOf(page.id);
+const nextId = at > -1 ? tour[(at + 1) % tour.length] : null;
 const body = page.body ?? '';
 const gated = !!page.data.protected;
 const dir = `../../private/${page.id}`;
@@ -51,7 +55,10 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
 ---
 <Base title={title}>
   <article class="case">
-    <a class="back" href={`${base}/#work`}>&larr; Work</a>
+    <div class="top">
+      <a class="back" href={`${base}/#work`}>&larr; Work</a>
+      {nextId && <a class="back next" href={`${base}/${nextId}/`}>Next project &rarr;</a>}
+    </div>
     <p class="display" aria-hidden="true"><span>{`${title} `.repeat(6)}</span></p>
     <div id="gate-content">
     {Private && <Fragment set:html={'<!--gate:start-->'} />}
@@ -116,6 +123,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
       <script type="application/json" id="gate-data" set:html={sealed} />
     )}
   </article>
+  <button type="button" class="totop" aria-label="Back to top">&uarr;</button>
   <style is:global>html { overflow-x: clip; }</style>
   {hideGallery && <style is:global set:html={`${hideGallery}{display:none}`} />}
 
@@ -191,6 +199,11 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
       lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') show(at - 1); if (e.key === 'ArrowRight') show(at + 1); });
       lb.addEventListener('click', () => lb.close());
     })();
+    const totop = document.querySelector('.totop');
+    const reveal = () => totop.classList.toggle('show', scrollY > 600);
+    addEventListener('scroll', reveal, { passive: true });
+    reveal();
+    totop.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
     // The big title drifts left as the page scrolls down.
     // Hero clip stays still for reduced-motion visitors.
     const still = () => { if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.querySelectorAll('.gallery video').forEach((v) => { v.pause(); v.controls = true; }); };
@@ -206,7 +219,19 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
 
   <style>
     .case { padding-top: 2rem; }
-    .back { color: var(--muted); text-decoration: none; display: inline-block; margin-bottom: 3rem; }
+    .top { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; padding: 1rem 0; margin-bottom: 2rem; background: var(--bg); }
+    /* Bar runs out to the right edge like the gallery, keeping its link inside the column. */
+    @media (min-width: 1000px) {
+      .top { --out: calc((100vw - min(1200px, 100vw - 26rem)) / 2); margin-right: calc(var(--out) * -1); padding-right: var(--out); }
+    }
+    .totop {
+      position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 2; width: 3rem; height: 3rem; border: 0; border-radius: 50%;
+      display: grid; place-items: center; background: var(--chip); color: var(--fg); font: inherit; font-size: 1.25rem; cursor: pointer;
+      opacity: 0; pointer-events: none; transform: translateY(0.5rem); transition: opacity 0.25s, transform 0.25s;
+    }
+    .totop.show { opacity: 1; pointer-events: auto; transform: none; }
+    .totop:hover, .totop:focus-visible { outline: 2px solid var(--fg); }
+    .back { color: var(--muted); text-decoration: none; display: inline-block; }
     .back:hover { color: var(--fg); }
 
     .display {
@@ -221,7 +246,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     }
     /* Details stay put on the left while the gallery scrolls on the right. */
     .split { display: grid; grid-template-columns: 4fr 8fr; gap: 3rem; align-items: start; }
-    .side { position: sticky; top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .side { position: sticky; top: 5rem; display: flex; flex-direction: column; gap: 1.5rem; }
     .side h1 { font-size: clamp(1.75rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; margin: 0 0 0.75rem; }
     .subtitle { margin: 0; color: var(--muted); max-width: none; }
     .label { margin: 0 0 0.5rem; font: inherit; font-size: 0.875rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
@@ -287,6 +312,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     @media (max-width: 999px) {
       .split { grid-template-columns: 1fr; gap: 2.5rem; }
       .side { position: static; }
+      .top { top: 3.5rem; }
     }
   </style>
 </Base>
