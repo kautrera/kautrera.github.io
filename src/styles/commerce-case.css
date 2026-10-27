@@ -1,0 +1,79 @@
+.cs { --accent: #ef5e31; margin-top: 0; }
+.cs .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+.cs .sec:first-child { border-top: 0; padding-top: 0; }
+.cs .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cs h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+.cs h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+.cs .copy { margin-bottom: 4rem; }
+.cs .copy p { margin: 0 0 1rem; max-width: 34rem; }
+.cs .copy strong { font-weight: 500; }
+.cs figure, .cs ol, .cs ul { margin: 0; }
+.cs ol, .cs ul { list-style: none; padding: 0; }
+.cs li { max-width: none; }
+.cs img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; border: 1px solid var(--rule); }
+.cs .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }
+.cs p { margin-top: 0; }
+
+.cs /* 02: fixed UI -> conversational UI -> generative UI. The last stage gets the room. */
+.evo { display: grid; grid-template-columns: 1fr 1fr 1.7fr; gap: 3rem; align-items: end; }
+.cs .stage p { margin: 0; color: var(--muted); max-width: 20rem; }
+.cs .stage.gen h3, .cs .stage.gen .num { color: var(--accent); }
+.cs .stage.gen h3 { font-size: clamp(1.5rem, 2.6vw, 2.25rem); }
+.cs .viz { position: relative; display: grid; aspect-ratio: 4 / 3; margin-bottom: 1.5rem; padding: 0.75rem; gap: 0.5rem; background: var(--chip); border: 1px solid var(--rule); }
+.cs .viz b, .cs .viz u, .cs .viz i { display: block; background: var(--rule); text-decoration: none; }
+.cs .v0, .cs .v1 { grid-template-columns: 0.6fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.cs .v0 .nav, .cs .v1 .nav { grid-row: 1 / 3; }
+.cs .v1 .chat { position: absolute; right: 0.75rem; bottom: 0.75rem; width: 46%; height: 62%; display: flex; flex-direction: column; justify-content: flex-end; gap: 0.35rem; padding: 0.5rem; background: var(--bg); border: 1px solid var(--muted); }
+.cs .chat i { height: 0.55rem; width: 70%; background: var(--rule); }
+.cs .chat i.me { align-self: flex-end; width: 55%; background: var(--muted); }
+.cs .v2 { grid-template-columns: 0.55fr 1.45fr; padding: 0.9rem; gap: 0.75rem; border-color: var(--accent); }
+.cs .v2 .chat { display: flex; flex-direction: column; justify-content: flex-end; gap: 0.4rem; padding: 0.5rem; background: var(--bg); }
+.cs .v2 .canvas { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1.5fr 1fr; gap: 0.5rem; padding: 0.6rem; background: var(--bg); border: 1px solid var(--accent); }
+.cs .v2 .canvas u { background: color-mix(in srgb, var(--accent) 22%, var(--bg)); }
+.cs .v2 .canvas u.hero { grid-column: 1 / -1; background: var(--accent); }
+
+.cs /* 03 */
+.stage-video { margin-bottom: 3rem; border: 1px solid var(--rule); }
+.cs .stage-video video { display: block; width: 100%; height: auto; }
+.cs .states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+.cs .states img { margin-bottom: 1rem; }
+.cs .states p { margin: 0; color: var(--muted); max-width: 22rem; }
+.cs .callout { margin: 6rem 0 0; max-width: 20ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+
+.cs /* 04 */
+.loop { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-bottom: 4rem; border: 1px solid var(--rule); }
+.cs .loop li { position: relative; padding: 1.5rem 1.25rem 1.75rem; border-left: 1px solid var(--rule); }
+.cs .loop li:first-child { border-left: 0; }
+.cs .loop li:not(:last-child)::after { content: '\2192'; position: absolute; right: -0.7rem; top: 1.4rem; z-index: 1; padding: 0 0.15rem; background: var(--bg); color: var(--muted); }
+.cs .loop li.gen { background: var(--accent); color: #000; }
+.cs .loop li.gen .num, .cs .loop li.gen p { color: #000; }
+.cs .loop p { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+.cs .frame { margin-bottom: 5rem; }
+.cs .principles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5rem; }
+.cs .principles li { padding-top: 1.25rem; border-top: 2px solid var(--fg); }
+.cs .principles p { margin: 0; color: var(--muted); max-width: 16rem; }
+.cs .last { padding-bottom: 2rem; }
+
+.cs .lb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+.cs .lb::backdrop { background: rgba(0, 0, 0, 0.88); }
+.cs .lb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; border: 0; }
+.cs .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+.cs .nav-btn:hover, .cs .nav-btn:focus-visible { background: #fff; outline: 2px solid var(--accent); }
+.cs .nav-btn[hidden] { display: none; }
+.cs .prev { left: 1.5rem; }
+.cs .next { right: 1.5rem; }
+
+@keyframes cs-rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+.cs h2, .cs figure, .cs .stage, .cs .states li, .cs .loop, .cs .principles li, .cs .callout {
+  animation: cs-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+}
+@media (prefers-reduced-motion: reduce) { .cs * { animation: none !important; } }
+
+@media (max-width: 999px) {
+  .cs .sec { padding: 4.5rem 0; }
+  .cs .evo, .cs .states, .cs .principles { grid-template-columns: 1fr; gap: 2.5rem; }
+  .cs .loop { grid-template-columns: 1fr 1fr; }
+  .cs .loop li:nth-child(odd) { border-left: 0; }
+  .cs .loop li:nth-child(n + 3) { border-top: 1px solid var(--rule); }
+  .cs .loop li::after { display: none; }
+}

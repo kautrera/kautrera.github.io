@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import RoadsterCase from '../components/RoadsterCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
+import '../styles/commerce-case.css';
 
 // Protected pages: private sources exist locally only (gitignored). CI renders from the committed ciphertext.
 const privateCases = import.meta.glob('../../private/*/CommerceCase.astro', { eager: true }) as Record<string, any>;
