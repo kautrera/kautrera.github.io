@@ -25,7 +25,7 @@ const { Content } = await render(page);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { title, date, role, tools } = page.data;
 // Same order as the wall, so "Next project" walks the tiles left to right.
-const tour = ['custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'palette', 'clippit', 'photobucket', 'ello', 'blue-coat'];
+const tour = ['palette', 'custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'clippit', 'photobucket', 'ello', 'blue-coat'];
 const at = tour.indexOf(page.id);
 const nextId = at > -1 ? tour[(at + 1) % tour.length] : null;
 const body = page.body ?? '';
