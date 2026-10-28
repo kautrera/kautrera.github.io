@@ -11,7 +11,7 @@
 .bs .full h2 { max-width: none; }
 .bs figure { margin: 0; }
 .bs img, .bs video { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
-.bs figure img { border: 1px solid var(--rule); cursor: zoom-in; }
+.bs figure img { cursor: zoom-in; }
 .bs figcaption { margin-top: 1rem; color: var(--muted); max-width: 34rem; }
 .bs figcaption strong { display: block; color: var(--fg); font-weight: 500; }
 .bs .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }

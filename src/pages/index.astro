@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar', 'ello', 'blue-coat', 'photobucket'];
+const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar', 'ello', 'blue-coat', 'photobucket', 'palette'];
 // Email is shipped base64-encoded and assembled in the browser, so scrapers reading raw HTML never see it.
 const emailToken = Buffer.from('karen.utera@gmail.com').toString('base64');
 // Wall position keeps an older project's former date, so changing a shown year doesn't reshuffle the wall.
@@ -84,9 +84,8 @@ const i1 = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
 const j1 = tiles.findIndex((t) => t.id === 'b2b-commerce');
 if (i1 > -1 && j1 > -1) [tiles[i1], tiles[j1]] = [tiles[j1], tiles[i1]];
 
-// Palette takes Visual Merchandising's slot; everything from there shifts one place right.
-const vm = tiles.findIndex((t) => t.title === 'Visual Merchandising');
-if (vm > -1) tiles.splice(vm, 0, { title: 'Palette', year: 2026, tone: (tiles[vm].tone + 1) % 4 });
+// Palette leads the wall; everything else shifts one place right.
+tiles.unshift({ id: 'palette', mark: true, title: 'Palette', year: 2026, tone: 0 });
 
 // Placeholder copy, edit freely.
 const audiences = [
@@ -110,7 +109,26 @@ const audiences = [
   <section id="work">
     <ul class="wall">
       {tiles.map((t) => {
-        const inner = t.image
+        const inner = t.mark
+          ? (
+            <span class="palmark" aria-hidden="true">
+              <span class="palicon">
+                <svg viewBox="0 0 32 32" width="52%">
+                  <mask id="pal-hole" maskUnits="userSpaceOnUse" x="0" y="0" width="32" height="32">
+                    <rect width="32" height="32" fill="#fff" />
+                    <circle cx="6.75" cy="25.5" r="2" fill="#000" />
+                  </mask>
+                  <g mask="url(#pal-hole)">
+                    <rect x="2.75" y="3" width="8" height="24.5" rx="3" fill="#8183c5" transform="rotate(28 6.75 25.5)" />
+                    <rect x="2.75" y="3" width="8" height="24.5" rx="3" fill="#5a63b6" transform="rotate(59 6.75 25.5)" />
+                    <rect x="2.75" y="3" width="8" height="24.5" rx="3" fill="#8183c5" transform="rotate(90 6.75 25.5)" />
+                    <rect x="2.5" y="2.5" width="8.5" height="27" rx="2.9" fill="#464c8e" />
+                  </g>
+                </svg>
+              </span>
+            </span>
+          )
+          : t.image
           ? <img src={base + t.image} alt={t.title} loading="lazy" style={t.focus ? `object-position: ${t.focus}` : undefined} />
           : <span class="blank">{t.title}</span>;
         const info = (
@@ -174,10 +192,25 @@ const audiences = [
     .wall li { position: relative; max-width: none; aspect-ratio: 4 / 3; overflow: hidden; background: var(--chip); transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s; }
     .wall li:hover, .wall li:focus-within { transform: scale(1.12); z-index: 2; box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35); }
     .wall a, .wall .tile { display: grid; place-items: center; width: 100%; height: 100%; color: var(--fg); text-decoration: none; }
+    .palmark { position: relative; display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; background: #14161f; }
+    .palmark::before {
+      content: ''; position: absolute; inset: -20%; filter: blur(28px);
+      background:
+        radial-gradient(38% 42% at 18% 22%, #c9b79f 0%, transparent 100%),
+        radial-gradient(40% 45% at 82% 20%, #1d2b2c 0%, transparent 100%),
+        radial-gradient(34% 38% at 28% 82%, #e9e1d3 0%, transparent 100%),
+        radial-gradient(42% 46% at 78% 78%, #8183c5 0%, transparent 100%),
+        radial-gradient(36% 40% at 55% 50%, #464c8e 0%, transparent 100%);
+    }
+    .palicon {
+      position: relative; z-index: 1; display: grid; place-items: center; width: 34%; aspect-ratio: 1; border-radius: 22%;
+      background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      border: 1px solid rgba(255, 255, 255, 0.7); box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
     .wall img { width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; }
     .info {
       position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem;
-      padding: 1.5rem; text-align: center; color: #fff; background: rgba(0, 0, 0, 0.62); opacity: 0; transition: opacity 0.3s;
+      padding: 1.5rem; text-align: center; color: #fff; background: rgba(0, 0, 0, 0.62); opacity: 0; z-index: 2; transition: opacity 0.3s;
     }
     .wall li:hover .info, .wall li:focus-within .info { opacity: 1; }
     .info .name { font-size: clamp(1.1rem, 1.9vw, 1.75rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }

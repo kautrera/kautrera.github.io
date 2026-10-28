@@ -1,0 +1,488 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const img = (name: string) => `${base}/images/${name}.webp`;
+const vid = (name: string) => `${base}/images/${name}.mp4`;
+
+const stages = [
+  ['01', 'Describe', 'The marketer expresses a goal through a natural-language prompt.', 'pal-intent', 'Prompt screen asking what would you like to create, with brand kit, assets and channel chips'],
+  ['02', 'Generate', 'The system presents a structured campaign with multiple messages.', 'pal-generating', 'Agent panel listing the steps it takes while generating the campaign'],
+  ['03', 'Explore', 'The marketer navigates the campaign visually.', 'pal-explore', 'Zoomed-out canvas with six email messages and the campaign structure on the left'],
+  ['04', 'Refine', 'Individual elements can be selected and edited using contextual controls.', 'pal-refine', 'Selected email with its properties open in the inspector'],
+];
+const weeks = [
+  ['Week 1', 'Establish the vision', ['Understand the product goals and domain.', 'Align the team on experience principles.', 'Define the core interaction model.', 'Explore the campaign creation journey.']],
+  ['Week 2', 'Bring it to life', ['Refine the product direction.', 'Build and polish the interactive concept.', 'Connect the core workflows.', 'Prepare the executive presentation.']],
+];
+const labels = [
+  ['Agent Assistance', 'Natural language for instructions and iteration.'],
+  ['Visual Canvas', 'Spatial understanding of the campaign.'],
+  ['Contextual Controls', 'Precise editing of individual elements.'],
+];
+const flow = [
+  ['Product vision', 'Interaction model and visual direction.'],
+  ['Design-system foundation', 'Reusable components, variants, tokens, and patterns.'],
+  ['Production teams', 'Implementation, integration, and product-specific functionality.'],
+];
+const layers = [
+  ['Foundation', 'Core visual values and shared primitives.', '--slds-g-color-accent-1: #4f5699'],
+  ['Semantic tokens', 'Meaningful roles that components point to.', '--primary'],
+  ['Component tokens', 'Values consumed by reusable React components.', '--slds-c-button-brand-color-background'],
+  ['Product experience', 'The assembled builder interface.', 'A brand button in the builder'],
+];
+const icons = [
+  '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8"/>',
+  '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
+  '<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/>',
+];
+const principles = [
+  ['Start with the user task', 'Not one-to-one visual parity with the platform’s existing components.'],
+  ['Test decisions in the product', 'A component isn’t validated only because it works in isolation.'],
+  ['Treat the theme as a system', 'Hierarchy, contrast, states, and semantic roles, not just surface values.'],
+];
+const record = [
+  ['Component or pattern', 'Canonical name and category.'],
+  ['User need', 'The task and the behavior it requires.'],
+  ['Options reviewed', 'Shadcn, the platform’s components, and the current prototype pattern.'],
+  ['Decision', 'Reuse, rebuild with primitives, or build net new.'],
+  ['Rationale', 'Why it best supports the user and the system.'],
+  ['UX contract', 'Anatomy, behavior, variants, states, content, and accessibility.'],
+  ['Validation', 'The flows and stress-test conditions reviewed.'],
+  ['Ownership', 'Owner, reviewers, approval, open issues, and next step.'],
+];
+const ramp = [['5', '#0c0b22'], ['10', '#13162c'], ['15', '#1e2140'], ['20', '#272b50'], ['30', '#3a4073'], ['35', '#444b86'], ['40', '#4f5699'], ['50', '#656ebe'], ['60', '#8c8ecc'], ['65', '#9b9cd2'], ['70', '#aaaad8'], ['80', '#c8c6e5'], ['85', '#d6d5ea'], ['90', '#e5e4f1'], ['95', '#f3f3f7']];
+const decisions = [
+  ['01', 'Reuse', 'Existing platform components that meet the builder’s needs.', '33', '17 map directly, 16 only needed a new name.'],
+  ['02', 'Extend', 'Components requiring variants or additional functionality.', '47', '13 shadcn components composable in SLDS, 34 SLDS components composable in shadcn.'],
+  ['03', 'Create', 'New patterns required by the builder experience.', '8', 'True gaps with no equivalent, plus 7 new primitives.'],
+];
+const outcomes = [
+  ['2 weeks', 'Initial product vision and interactive concept.'],
+  ['Executive buy-in', 'Leadership alignment on the proposed experience direction.'],
+  ['Design-system mandate', 'Follow-on engagement developing reusable React components and token architecture.'],
+];
+---
+<div class="pal">
+  <header class="chapter">
+    <p class="eyebrow">Chapter 1</p>
+    <p class="chap">The Vision</p>
+  </header>
+
+  <!-- 01 -->
+  <section class="sec">
+    <p class="eyebrow">01 · The Challenge</p>
+    <h2>A New Domain, a New Team, Two Weeks</h2>
+    <div class="split intro">
+      <div class="copy">
+        <p>I was brought into Marketing Cloud from Commerce Cloud to lead the UX vision for an AI-powered campaign builder, on a two-week timeline.</p>
+        <p>The domain was new to me, and so was the team.</p>
+        <p>Creating campaigns means bringing together content, audiences, channels, and customer journeys. The opportunity was an interaction model where marketers express their intent, generate content, and refine the result visually.</p>
+        <p>My first priority was a shared understanding of the experience we wanted to create, and a way to make it tangible. I led the UX vision and aligned the design effort around it.</p>
+        <p>Within two weeks, we had an interactive concept ready for review.</p>
+      </div>
+      <figure class="screen"><img src={img('pal-group')} alt="Four selected emails grouped on the canvas, with group properties and a Publish All action" loading="lazy" /></figure>
+    </div>
+    <ol class="weeks row">
+        {weeks.map(([w, t, items]) => (
+          <li>
+            <span class="num">{w}</span>
+            <h3>{t}</h3>
+            <ul>{(items as string[]).map((i) => <li>{i}</li>)}</ul>
+          </li>
+        ))}
+      </ol>
+    <p class="callout">An unfamiliar domain. A new team. One shared product direction.</p>
+  </section>
+
+  <!-- 02 -->
+  <section class="sec">
+    <p class="eyebrow">02 · The Interaction Model</p>
+    <h2>From Intent to Interactive Campaigns</h2>
+    <div class="copy wide">
+      <p>AI changes how marketers can begin creative work. Instead of configuring every part of a campaign manually, they start by describing what they want to accomplish.</p>
+      <p>The builder translates that intent into a structured campaign. From there, marketers explore the generated content, select individual messages, and make precise changes.</p>
+      <p>The experience combines natural language with direct manipulation, so people can move fluidly between automation and creative control.</p>
+    </div>
+    <div class="vid">
+      <video src={vid('pal-intent-to-campaign')} aria-label="Answering the assistant’s questions, then watching the campaign generate on the canvas" muted loop playsinline preload="metadata"></video>
+      <button type="button" class="pp" aria-label="Pause animation">Pause</button>
+    </div>
+    <ol class="four">
+      {stages.map(([n, t, d, i, alt]) => (
+        <li>
+          <figure><img src={img(i)} alt={alt} loading="lazy" /></figure>
+          <span class="num">{n}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+        </li>
+      ))}
+    </ol>
+    <p class="callout">From a simple request to an editable campaign experience.</p>
+  </section>
+
+  <!-- 03 -->
+  <section class="sec">
+    <p class="eyebrow">03 · Agentic Experience Design</p>
+    <h2>AI That Creates. People Who Shape.</h2>
+    <div class="copy wide">
+      <p>AI can generate a starting point, but marketers still need control over the creative decisions that define their campaigns.</p>
+      <p>The builder brings AI assistance and visual editing into the same workspace. Users can work through conversation, manipulate content directly, or adjust precise properties through contextual controls.</p>
+      <p>The challenge was balancing density, hierarchy, and flexibility while keeping the interface approachable.</p>
+    </div>
+    <div class="vid">
+      <video src={vid('pal-direct-editing')} aria-label="Selecting an image in a message and swapping it from the content panel" muted loop playsinline preload="metadata"></video>
+      <button type="button" class="pp" aria-label="Pause animation">Pause</button>
+    </div>
+    <ul class="three">
+      {labels.map(([t, d]) => <li><h3>{t}</h3><p>{d}</p></li>)}
+    </ul>
+    <div class="vid more">
+      <video src={vid('pal-contextual-controls')} aria-label="Selecting different items on the canvas while the inspector changes to match" muted loop playsinline preload="metadata"></video>
+      <button type="button" class="pp" aria-label="Pause animation">Pause</button>
+    </div>
+    <p class="cap">The inspector responds to whatever is selected: a single email, a group, or several messages at once.</p>
+  </section>
+
+  <!-- 04 -->
+  <section class="sec">
+    <p class="eyebrow">04 · The Turning Point</p>
+    <h2>A Concept Leadership Could React To</h2>
+    <div class="copy wide">
+      <p>Earlier efforts hadn’t yet landed on a direction leadership could align around.</p>
+      <p>A tangible, interactive concept gave them something to react to instead of a description to interpret, making the opportunity easier to understand, evaluate, and support.</p>
+      <p>The concept secured executive support and established a clear direction for the next phase of work.</p>
+    </div>
+    <figure class="stage wide"><img src={img('pal-hero')} alt="The complete builder workspace: campaign structure, seven messages on the canvas, and the agent bar" loading="lazy" /></figure>
+  </section>
+
+  <!-- 05 -->
+  <section class="sec">
+    <p class="eyebrow">05 · Invited Back</p>
+    <h2>The Work Earned a Second Engagement</h2>
+    <div class="copy wide">
+      <p>The quality of the concept led to an invitation to help scale it into a reusable design system.</p>
+    </div>
+    <ul class="miles">
+      <li><strong>2 weeks</strong><p>From initial engagement to executive presentation.</p></li>
+      <li><strong>Second engagement</strong><p>Invited back to establish the reusable component foundation.</p></li>
+    </ul>
+    <p class="callout">The product vision created the foundation for a broader design-system initiative.</p>
+  </section>
+
+  <header class="chapter">
+    <p class="eyebrow">Chapter 2</p>
+    <p class="chap">The System</p>
+  </header>
+
+  <!-- 06 -->
+  <section class="sec">
+    <p class="eyebrow">06 · Scaling the Experience</p>
+    <h2>Giving Teams a Foundation to Build From</h2>
+    <div class="copy wide">
+      <p>A successful concept is only the beginning. The next challenge was translating the vision into a system that production teams could implement and extend.</p>
+      <p>I developed a handoff strategy to connect the experience direction with implementation requirements, reusable patterns, and the responsibilities of downstream teams, preserving the clarity and quality of the concept on the way to production.</p>
+    </div>
+    <ol class="stack">
+      {flow.map(([t, d], i) => (
+        <li>
+          <span class="num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+        </li>
+      ))}
+    </ol>
+    <div class="duo tok bal">
+      <div class="card">
+        <span class="num">Principles</span>
+        <ul class="prin">
+          {principles.map(([t, d], i) => (
+            <li>
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[i]}></svg>
+              <div><h3>{t}</h3><p>{d}</p></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="card">
+        <span class="num">Decision record</span>
+        <dl class="rec">{record.map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="sec">
+    <p class="eyebrow">07 · Design Systems</p>
+    <h2>Reusable Building Blocks, Aligned to the Platform</h2>
+    <div class="copy wide">
+      <p>I helped build a reusable React component library that translated the builder’s visual language and interaction patterns into a foundation production teams could use.</p>
+      <p>Mapping the builder against the platform’s components showed what could be reused, where variants were needed, and where new patterns were required.</p>
+      <p>I worked across design and engineering to keep that foundation consistent with platform standards without losing the usability and craft of the original experience.</p>
+    </div>
+    <figure class="sys">
+      <img src={img('pal-sys-popover-sheet')} alt="The Popover page in the Figma component library: the component and its trigger states, a light and dark example, and the SLDS popover examples" loading="lazy" />
+      <figcaption><strong>Popover</strong>Figma component library: the component and its states, a light and dark example, and the SLDS variants it maps to.</figcaption>
+    </figure>
+    <ul class="three cols">
+      {decisions.map(([n, t, d, c, f]) => (
+        <li>
+          <figure class="stat"><strong>{c}</strong><span>{f}</span></figure>
+          <span class="num">{n}</span>
+          <h3>{t}</h3>
+          <p>{d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 08 -->
+  <section class="sec">
+    <p class="eyebrow">08 · System Architecture</p>
+    <h2>One System. Consistent Experiences.</h2>
+    <div class="copy wide">
+      <p>Reusable components need a consistent foundation for visual styling and behavior.</p>
+      <p>I collaborated with Salesforce’s platform design systems team to define the token architecture and map the builder’s design language to shared system primitives, maintaining the visual quality of the experience while supporting consistency, reuse, and future evolution.</p>
+    </div>
+    <ol class="layers">
+      {layers.map(([t, d, e], i) => (
+        <li>
+          <span class="num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{t}</h3>
+          <p>{d}<code>{e}</code></p>
+        </li>
+      ))}
+    </ol>
+    <div class="duo tok">
+      <figure class="card">
+        <div class="ramp">{ramp.map(([k, v]) => <span style={`background:${v}`} title={`brand-${k} ${v}`} class:list={[{ on: k === '40' }]}></span>)}</div>
+        <figcaption><strong>A periwinkle brand ramp</strong>Fifteen steps, defined for the builder. Step 40, #4f5699, feeds the primary accent and the brand button.</figcaption>
+      </figure>
+      <figure class="card">
+        <div class="swap"><span class="chip-c" style="background:#0176D3"></span><span class="arrow">→</span><span class="chip-c" style="background:#4f5699"></span></div>
+        <figcaption><strong>One role, two systems</strong>The base platform theme defaults the primary role to #0176D3. The builder overrides it to periwinkle without changing how components reference it.</figcaption>
+      </figure>
+    </div>
+    <p class="callout">A shared visual foundation that supports both consistency and flexibility.</p>
+  </section>
+
+  <!-- 09 -->
+  <section class="sec last">
+    <p class="eyebrow">09 · Reflection</p>
+    <h2>Craft Creates Trust. Systems Create Scale.</h2>
+    <div class="copy wide">
+      <p>Stepping into an unfamiliar domain, leading a team I hadn’t worked with, and earning leadership support in two weeks came down to making the vision tangible.</p>
+      <p>That same craft earned a second engagement, where we turned the concept into reusable components and shared design tokens.</p>
+      <p>The most valuable result wasn’t any single deliverable. It was a direction teams could keep building on.</p>
+    </div>
+    <ul class="three big3">
+      {outcomes.map(([t, d]) => <li><strong>{t}</strong><p>{d}</p></li>)}
+    </ul>
+    <blockquote>Great design establishes a direction. Great systems help teams build on it.</blockquote>
+  </section>
+
+  <dialog class="lb" aria-label="Enlarged image">
+    <img alt="" />
+    <button type="button" class="nav prev" aria-label="Previous image">&larr;</button>
+    <button type="button" class="nav next" aria-label="Next image">&rarr;</button>
+  </dialog>
+</div>
+
+<script>
+  const root = document.querySelector('.pal');
+  if (root) {
+    const lb = root.querySelector<HTMLDialogElement>('.lb')!;
+    const big = lb.querySelector('img')!;
+    const prev = lb.querySelector<HTMLButtonElement>('.prev')!;
+    const next = lb.querySelector<HTMLButtonElement>('.next')!;
+    let group: HTMLImageElement[] = [];
+    let at = 0;
+    const show = (i: number) => {
+      at = (i + group.length) % group.length;
+      const im = group[at];
+      big.src = im.currentSrc || im.src;
+      big.alt = im.alt;
+      prev.hidden = next.hidden = group.length < 2;
+    };
+    root.querySelectorAll<HTMLImageElement>('section img').forEach((im) => {
+      im.tabIndex = 0;
+      im.setAttribute('role', 'button');
+      im.setAttribute('aria-label', `Enlarge: ${im.alt}`);
+      const open = () => {
+        group = [...im.closest('section')!.querySelectorAll<HTMLImageElement>('img')];
+        show(group.indexOf(im));
+        lb.showModal();
+      };
+      im.addEventListener('click', open);
+      im.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+    });
+    prev.addEventListener('click', (e) => { e.stopPropagation(); show(at - 1); });
+    next.addEventListener('click', (e) => { e.stopPropagation(); show(at + 1); });
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+    lb.addEventListener('click', () => lb.close());
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    root.querySelectorAll<HTMLElement>('.vid').forEach((box) => {
+      const v = box.querySelector('video')!;
+      const btn = box.querySelector<HTMLButtonElement>('.pp')!;
+      let manual = reduce;
+      const sync = () => { btn.textContent = v.paused ? 'Play' : 'Pause'; btn.setAttribute('aria-label', v.paused ? 'Play animation' : 'Pause animation'); };
+      btn.addEventListener('click', () => { manual = !v.paused; v.paused ? v.play() : v.pause(); sync(); });
+      v.addEventListener('play', sync); v.addEventListener('pause', sync);
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((es) => es.forEach((en) => {
+          if (en.isIntersecting && !manual) v.play().catch(() => {});
+          else if (!en.isIntersecting) v.pause();
+        }), { threshold: 0.4 }).observe(v);
+      }
+      sync();
+    });
+  }
+</script>
+
+<style>
+  .pal { --accent: var(--muted); }
+  .chapter { padding: 7rem 0 0; border-top: 2px solid var(--fg); }
+  .chap { margin: 0; font-size: clamp(3rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 500; max-width: none; }
+  .sec { padding: 7rem 0; border-top: 1px solid var(--rule); }
+  .chapter + .sec { margin-top: 5rem; }
+  .eyebrow { margin: 0 0 1.25rem; font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  h2 { margin: 0 0 3rem; max-width: 16ch; font-size: clamp(2.25rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem; font-size: clamp(1.25rem, 1.9vw, 1.6rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 500; }
+  .copy p { margin: 0 0 1rem; max-width: 34rem; }
+  .copy.wide { margin-bottom: 4rem; }
+  .copy.wide p { max-width: 46rem; }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; cursor: zoom-in; }
+  figcaption, .cap { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+  figcaption strong { display: block; margin-bottom: 0.25rem; color: var(--fg); font-size: 1.1rem; font-weight: 500; letter-spacing: -0.02em; }
+  .num { display: block; margin: 0 0 0.75rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  ul, ol { list-style: none; padding: 0; margin: 0; }
+  li p { margin: 0; color: var(--muted); max-width: 22rem; }
+  .callout { margin: 4rem 0 0; max-width: 24ch; font-size: clamp(1.5rem, 2.8vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; font-weight: 500; }
+  .note { margin: 0 0 2rem; color: var(--muted); font-size: 0.875rem; max-width: none; }
+
+  .vid { position: relative; margin-bottom: 3rem; }
+  .vid.more { margin: 4rem 0 0; }
+  .vid video { display: block; width: 100%; height: auto; background: var(--chip); }
+  .pp { position: absolute; right: 1rem; bottom: 1rem; padding: 0.4rem 0.9rem; border: 0; border-radius: 20px; background: rgba(0, 0, 0, 0.7); color: #fff; font: inherit; font-size: 0.875rem; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+  .vid:hover .pp, .pp:focus-visible { opacity: 1; }
+
+  .versus { display: grid; grid-template-columns: 1fr 7rem 1fr; gap: 1.5rem; align-items: center; }
+  .steps { display: flex; flex-direction: column; gap: 1.25rem; text-align: center; color: var(--accent); font-size: 0.875rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .steps li::after { content: '↓'; display: block; margin-top: 0.5rem; color: var(--muted); }
+  .steps li:last-child::after { content: none; }
+
+  .split { display: grid; grid-template-columns: 5fr 7fr; gap: 4rem; align-items: start; }
+  .weeks { display: flex; flex-direction: column; gap: 3rem; }
+  .intro { margin-bottom: 4rem; }
+  .screen { margin: 0; padding: 12px 12px 12px; background: #f5f5f7; border: 1px solid #d2d2d7; border-radius: 14px; }
+  .screen img { display: block; width: 100%; height: auto; border-radius: 3px; }
+  .weeks.row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem; }
+  .weeks > li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .weeks ul li { padding: 0.35rem 0; border-bottom: 1px solid var(--rule); max-width: 28rem; }
+
+  .four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .four li p { max-width: none; font-size: 0.9375rem; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 3rem; }
+  .three li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 4rem; }
+
+  .stage { margin: 0 0 4rem; }
+  .stage.wide { margin: 0 0 4rem; }
+  .crops { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .crops figure { margin-bottom: 1rem; }
+  .crops img { aspect-ratio: 4 / 3.4; object-fit: cover; object-position: top left; }
+
+  .miles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+  .miles li { padding-top: 1.5rem; border-top: 2px solid var(--fg); }
+  .miles strong, .big3 strong { display: block; margin-bottom: 0.75rem; font-size: clamp(2.5rem, 5vw, 4.25rem); line-height: 1; letter-spacing: -0.045em; font-weight: 500; }
+
+  .stack { display: grid; gap: 0; margin-bottom: 4rem; }
+  .stack li { position: relative; padding: 2rem 0; border-top: 2px solid var(--fg); }
+  .stack li:not(:last-child)::after { content: '↓'; position: absolute; right: 0; top: 2rem; color: var(--accent); font-size: 2rem; }
+  .stack h3 { font-size: clamp(1.75rem, 3.2vw, 2.75rem); letter-spacing: -0.04em; }
+  .stack .num { margin-bottom: 0.5rem; }
+
+  .layers { display: grid; gap: 0.75rem; margin-bottom: 3rem; }
+  .layers li { display: grid; grid-template-columns: 4rem 16rem 1fr; gap: 1.5rem; align-items: baseline; padding: 1.5rem; background: var(--chip); border-left: 4px solid var(--accent); }
+  .layers li:nth-child(2) { margin-left: 2rem; }
+  .layers li:nth-child(3) { margin-left: 4rem; }
+  .layers li:nth-child(4) { margin-left: 6rem; }
+  .layers .num, .layers h3 { margin: 0; }
+  .layers p { max-width: none; }
+  .layers code { font: inherit; display: block; margin-top: 0.5rem; color: var(--muted); font-size: 0.8125rem; word-break: break-all; }
+  .sys img { width: 100%; height: auto; display: block; cursor: zoom-in; }
+  .sys { margin-bottom: 1.5rem; }
+  .tok { margin-top: 3rem; align-items: start; }
+  .card { margin: 0; padding: 1.5rem; background: var(--chip); }
+  .ramp { display: grid; grid-template-columns: repeat(15, 1fr); height: 5rem; }
+  .ramp span { display: block; }
+  .ramp span.on { outline: 2px solid var(--fg); outline-offset: 2px; position: relative; z-index: 1; }
+  .stat { margin: 0 0 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem; background: var(--chip); min-height: 12rem; justify-content: space-between; }
+  .stat strong { font-size: clamp(3rem, 6vw, 5rem); line-height: 1; letter-spacing: -0.05em; font-weight: 500; }
+  .stat span { color: var(--muted); font-size: 0.9375rem; }
+  .rec { display: grid; grid-template-columns: 9rem 1fr; gap: 0.75rem 1rem; margin: 0; }
+  .rec dt { font-weight: 500; }
+  .rec dd { margin: 0; color: var(--muted); }
+  .sub { margin: 4rem 0 0; font-size: clamp(1.5rem, 2.4vw, 2rem); letter-spacing: -0.03em; font-weight: 500; }
+  .tok.bal { align-items: stretch; }
+  .tok.bal .card { display: flex; flex-direction: column; }
+  .prin { display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
+  .prin li { display: block; }
+  .prin svg { display: block; margin: 0 0 0.75rem; }
+  .prin h3 { margin: 0 0 0.25rem; font: inherit; font-weight: 500; letter-spacing: normal; }
+  .prin p { margin: 0; max-width: none; font: inherit; color: var(--muted); }
+  .card figcaption { margin-top: 1.25rem; }
+  .swap { display: flex; align-items: center; gap: 1rem; height: 5rem; }
+  .swap .arrow { color: var(--muted); font-size: 1.75rem; }
+  .swap .chip-c { width: 5rem; height: 5rem; border-radius: 50%; }
+  .arts { gap: 1.5rem; margin-top: 0; }
+  .arts li { padding: 0; border: 0; }
+
+  .ph { position: relative; display: grid; place-items: center; min-height: 16rem; padding: 2rem; text-align: center; background: var(--chip); border: 1px dashed var(--muted); }
+  .ph.tall { min-height: 30rem; margin-bottom: 1.5rem; }
+  .ph p { margin: 0.5rem auto 0; color: var(--muted); max-width: 26ch; }
+  .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 20px; background: var(--fg); color: var(--bg); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ph figcaption { position: absolute; left: 0; bottom: -2rem; }
+  .duo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .duo.end { margin-top: 5rem; }
+  .duo.end figure { margin-bottom: 1rem; }
+  .cols { margin-top: 0; margin-bottom: 3rem; }
+  .cols li { border: 0; padding-top: 0; }
+  .cols figure { margin-bottom: 1.25rem; }
+  .cols .ph { min-height: 12rem; }
+
+  .big3 li p { max-width: 20rem; }
+
+  .last { padding-bottom: 2rem; }
+  blockquote { margin: 5rem 0 0; max-width: 22ch; font-size: clamp(2rem, 4.6vw, 3.75rem); line-height: 1.08; letter-spacing: -0.04em; font-weight: 500; }
+
+  .lb { padding: 0; border: 0; background: transparent; max-width: 94vw; max-height: 94vh; overflow: visible; }
+  .lb::backdrop { background: rgba(0, 0, 0, 0.88); }
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 3.25rem; height: 3.25rem; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.92); color: #000; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+  .nav:hover, .nav:focus-visible { background: #fff; outline: 2px solid var(--accent); }
+  .nav[hidden] { display: none; }
+  .prev { left: 1.5rem; }
+  .next { right: 1.5rem; }
+  .lb img { width: auto; max-width: 94vw; max-height: 94vh; margin: 0; cursor: zoom-out; background: #fff; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(2.5rem); } to { opacity: 1; transform: none; } }
+  h2, figure, .vid, .three li, .four li, .weeks > li, .stack li, .layers li, .act, .miles li, .callout, blockquote, .chap {
+    animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 35%;
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .pp { opacity: 1; } }
+
+  @media (max-width: 999px) {
+    .sec { padding: 4.5rem 0; }
+    .versus, .split, .weeks.row, .miles, .duo, .three, .crops, .trio { grid-template-columns: 1fr; gap: 2.5rem; }
+    .four { grid-template-columns: repeat(2, 1fr); }
+    .steps { flex-direction: row; justify-content: center; }
+    .steps li::after { content: '→'; display: inline; margin: 0 0 0 0.75rem; }
+    .layers li { grid-template-columns: 1fr; gap: 0.5rem; margin-left: 0 !important; }
+    .stack li::after { display: none; }
+    .ph.tall { min-height: 16rem; }
+    .pp { opacity: 1; }
+  }
+</style>

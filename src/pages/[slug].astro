@@ -5,6 +5,7 @@ import RoadsterCase from '../components/RoadsterCase.astro';
 import CustomAppsCase from '../components/CustomAppsCase.astro';
 import TrueCarCase from '../components/TrueCarCase.astro';
 import B2BCase from '../components/B2BCase.astro';
+import PaletteCase from '../components/PaletteCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
 import '../styles/commerce-case.css';
 import '../styles/studio-case.css';
@@ -24,7 +25,7 @@ const { Content } = await render(page);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { title, date, role, tools } = page.data;
 // Same order as the wall, so "Next project" walks the tiles left to right.
-const tour = ['custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'clippit', 'photobucket', 'ello', 'blue-coat'];
+const tour = ['custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'palette', 'clippit', 'photobucket', 'ello', 'blue-coat'];
 const at = tour.indexOf(page.id);
 const nextId = at > -1 ? tour[(at + 1) % tour.length] : null;
 const body = page.body ?? '';
@@ -47,7 +48,7 @@ const gallery = gallerySrc.map((g: any) => {
   const item = typeof g === 'string' ? { src: g } : g;
   return { ...item, url: meta ? privateAssets[`${dir}/${item.src}`] : base + item.src };
 });
-const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : page.id === 'b2b-commerce' ? B2BCase : Private ?? null;
+const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : page.id === 'b2b-commerce' ? B2BCase : page.id === 'palette' ? PaletteCase : Private ?? null;
 const rawFacts = meta?.facts ?? page.data.facts;
 const facts = rawFacts && !rawFacts.some((f: any) => /^year$/i.test(f.label)) ? [...rawFacts, { label: 'Year', value: String(page.data.year ?? date.getFullYear()) }] : rawFacts;
 const hasCase = gated || !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
@@ -93,7 +94,9 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
       <div class:list={['gallery', { centered: page.id === 'b2b-commerce' }]}>
         {gallery.map((g: any) => g.caption
           ? <figure>{g.src.endsWith('.mp4')
-              ? <video src={g.url} aria-label={g.caption} muted loop playsinline autoplay preload="auto"></video>
+              ? (g.frame === 'imac'
+                  ? <div class="imac"><div class="bezel"><video src={g.url} aria-label={g.caption} muted loop playsinline autoplay preload="auto"></video><span class="chin"></span></div><span class="neck"></span><span class="foot"></span></div>
+                  : <video src={g.url} aria-label={g.caption} muted loop playsinline autoplay preload="auto"></video>)
               : <img src={g.url} alt={g.caption} />}<figcaption>{g.caption}</figcaption></figure>
           : <img src={g.url} alt={title} />)}
       </div>
@@ -269,6 +272,12 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .gallery figure { margin: 0; }
     .gallery video { width: 100%; height: auto; display: block; }
     .gallery figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+    .imac { width: 100%; }
+    .imac .bezel { background: #f5f5f7; border: 1px solid #d2d2d7; border-radius: 18px; padding: 14px 14px 0; }
+    .imac video { border-radius: 3px; background: #000; }
+    .imac .chin { display: block; height: 3.25rem; }
+    .imac .neck { display: block; width: 14%; height: 3.5rem; margin: 0 auto; background: linear-gradient(90deg, #cfcfd4, #ececef 50%, #cfcfd4); }
+    .imac .foot { display: block; width: 26%; height: 0.6rem; margin: 0 auto; border-radius: 0 0 0.6rem 0.6rem; background: linear-gradient(#d9d9de, #bdbdc2); }
     .gallery.centered figcaption { text-align: center; }
     #gate { max-width: 26rem; margin: 6rem 0 8rem; }
     #gate label { display: block; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }

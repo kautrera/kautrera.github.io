@@ -283,7 +283,6 @@ const outcomes = [
   .problem { display: grid; grid-template-columns: 5fr 7fr; gap: 3rem 4rem; align-items: start; }
   .problem .copy { grid-column: 1; grid-row: 1; }
   .shot { grid-column: 2; grid-row: 1 / span 2; }
-  .shot img { border: 1px solid var(--rule); }
   /* Metrics sit under the copy, inside the left column. */
   .metrics { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; gap: 2rem 3rem; align-self: start; }
   .big { display: block; font-size: clamp(1.75rem, 3.4vw, 3rem); line-height: 1; letter-spacing: -0.05em; font-weight: 500; font-variant-numeric: tabular-nums; }
@@ -321,18 +320,14 @@ const outcomes = [
 
   /* 05 */
   .screens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  .screens img { border: 1px solid var(--rule); }
 
   /* 06 */
-  .frame img { border: 1px solid var(--rule); }
   .sub { margin: 6rem 0 1rem; font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.03em; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-  .pair img { border: 1px solid var(--rule); }
   .user { display: inline-block; margin-bottom: 1rem; padding: 0.15rem 0.7rem; border: 1px solid var(--muted); border-radius: 28px; color: var(--muted); font-size: 0.875rem; }
 
   /* 07 */
   .duo { display: grid; grid-template-columns: 5fr 7fr; gap: 3rem 4rem; align-items: start; margin-bottom: 6rem; }
-  .duo img { border: 1px solid var(--rule); }
   /* Lift the consumer shot so its bottom edge roughly meets the copy's. */
   .duo figure { margin-top: -1.25rem; }
   .dealer-label { margin-bottom: 1.5rem; }

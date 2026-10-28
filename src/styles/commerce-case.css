@@ -10,7 +10,7 @@
 .cs figure, .cs ol, .cs ul { margin: 0; }
 .cs ol, .cs ul { list-style: none; padding: 0; }
 .cs li { max-width: none; }
-.cs img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; border: 1px solid var(--rule); }
+.cs img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
 .cs .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }
 .cs p { margin-top: 0; }
 
