@@ -102,7 +102,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
       </div>
     </div>
     )}
-    {hasCase && Custom && <section id="case-study" class="custom"><Custom /></section>}
+    {hasCase && Custom && <section id="case-study" class:list={['custom', { flush: page.id === 'palette' }]}><Custom /></section>}
     {hasCase && !Custom && !gated && <section id="case-study" class="prose"><Content /></section>}
     {hasCase && !Custom && !gated && (
       <dialog class="plb" aria-label="Enlarged image">
@@ -261,6 +261,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .facts.grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
     .facts.grid p { max-width: none; }
     .custom { margin-top: 8rem; padding-top: 3rem; border-top: 1px solid var(--rule); scroll-margin-top: 2rem; }
+    .custom.flush { padding-top: 0; border-top: 0; }
     .pill {
       display: grid; place-items: center; height: 2.9rem; border: 2px solid var(--muted); border-radius: 28px;
       color: var(--fg); text-decoration: none; font-weight: 500; transition: border-color 0.2s;
@@ -278,7 +279,7 @@ const hideGallery = gated ? '' : gallery.map((g: any) => `.case .prose img[src="
     .imac .chin { display: block; height: 3.25rem; }
     .imac .neck { display: block; width: 14%; height: 3.5rem; margin: 0 auto; background: linear-gradient(90deg, #cfcfd4, #ececef 50%, #cfcfd4); }
     .imac .foot { display: block; width: 26%; height: 0.6rem; margin: 0 auto; border-radius: 0 0 0.6rem 0.6rem; background: linear-gradient(#d9d9de, #bdbdc2); }
-    .gallery.centered figcaption { text-align: center; }
+    .gallery.centered figcaption, .gallery figure:has(.imac) figcaption { text-align: center; }
     #gate { max-width: 26rem; margin: 6rem 0 8rem; }
     #gate label { display: block; font-size: clamp(1.5rem, 2.6vw, 2.25rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 500; }
     #gate .hint { margin: 0.5rem 0 1.5rem; color: var(--muted); }
