@@ -10,7 +10,7 @@
 .cs figure, .cs ol, .cs ul { margin: 0; }
 .cs ol, .cs ul { list-style: none; padding: 0; }
 .cs li { max-width: none; }
-.cs img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
+.cs img { display: block; width: 100%; height: auto; margin: 0; border-radius: 16px; }
 .cs .num { display: block; margin-bottom: 0.5rem; color: var(--muted); font-size: 0.875rem; letter-spacing: 0.06em; }
 .cs p { margin-top: 0; }
 
@@ -77,3 +77,24 @@
   .cs .loop li:nth-child(n + 3) { border-top: 1px solid var(--rule); }
   .cs .loop li::after { display: none; }
 }
+
+.cs /* chapters + walkthrough */
+.chapter { padding: 7rem 0 0; border-top: 2px solid var(--fg); }
+.cs .chapter:first-child { border-top: 0; padding-top: 0; }
+.cs .chap { margin: 0; font-size: clamp(3rem, 9vw, 8rem); line-height: 0.95; letter-spacing: -0.05em; font-weight: 500; max-width: none; }
+.cs .chapter + .sec { margin-top: 5rem; border-top: 0; padding-top: 0; }
+.cs .sec.first { border-top: 0; }
+.cs figcaption, .cs .cap { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; }
+.cs .shots { display: grid; gap: 2rem; margin-top: 3rem; }
+.cs .shots.two { grid-template-columns: 1fr 1fr; }
+.cs .stage-video + .shots, .cs .shots + .stage-video { margin-top: 3rem; }
+.cs .frame + .frame { margin-top: 0; }
+@media (max-width: 760px) { .cs .shots.two { grid-template-columns: 1fr; } .cs .chapter { padding-top: 4.5rem; } }
+
+/* rounded media + breathing room after lists */
+.cs .stage-video { border-radius: 16px; overflow: hidden; }
+.cs .stage-video video { border-radius: 16px; }
+.cs .principles + figure, .cs .principles + .shots, .cs .loop + figure, .cs .loop + .shots, .cs .callout + figure, .cs .callout + .shots { margin-top: 4rem; }
+.cs .principles, .cs .loop { margin-bottom: 0; }
+.cs .loop + .principles { margin-top: 4rem; }
+.cs .shots { margin-bottom: 5rem; }
