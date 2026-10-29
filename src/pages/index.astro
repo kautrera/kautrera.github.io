@@ -48,9 +48,6 @@ const current = [
   { id: 'bm-ux-studio', title: 'BM UX Studio', image: '/images/bm-ux-studio.webp' },
   { title: 'Commerce D2C', year: 2022 },
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
-  'Page Designer',
-  { title: 'Visual Merchandising', year: 2025 },
-  { title: 'Catalog Enrichment', tone: 3 },
 ].map((c, i) => ({ tone: i % 4, ...(typeof c === 'string' ? { title: c } : c) }));
 
 const tiles = [];
@@ -63,26 +60,6 @@ for (let i = 0; i < Math.max(current.length, wall.length); i++) {
 const a = tiles.findIndex((t) => t.title === 'Commerce Studio');
 const b = tiles.findIndex((t) => t.id === 'b2b-commerce');
 if (a > -1 && b > -1) [tiles[a], tiles[b]] = [tiles[b], tiles[a]];
-
-// Swap Visual Merchandising and Clippit.
-const e = tiles.findIndex((t) => t.title === 'Visual Merchandising');
-const f = tiles.findIndex((t) => t.id === 'clippit');
-if (e > -1 && f > -1) [tiles[e], tiles[f]] = [tiles[f], tiles[e]];
-
-// Swap Commerce D2C and Visual Merchandising.
-const k1 = tiles.findIndex((t) => t.title === 'Commerce D2C');
-const k2 = tiles.findIndex((t) => t.title === 'Visual Merchandising');
-if (k1 > -1 && k2 > -1) [tiles[k1], tiles[k2]] = [tiles[k2], tiles[k1]];
-
-// Swap Catalog Enrichment and Ello.
-const g = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
-const h = tiles.findIndex((t) => t.title === 'Ello');
-if (g > -1 && h > -1) [tiles[g], tiles[h]] = [tiles[h], tiles[g]];
-
-// Swap Catalog Enrichment and B2B Commerce.
-const i1 = tiles.findIndex((t) => t.title === 'Catalog Enrichment');
-const j1 = tiles.findIndex((t) => t.id === 'b2b-commerce');
-if (i1 > -1 && j1 > -1) [tiles[i1], tiles[j1]] = [tiles[j1], tiles[i1]];
 
 // Palette leads the wall; everything else shifts one place right.
 tiles.unshift({ id: 'palette', mark: true, title: 'Palette', year: 2026, tone: 0 });
