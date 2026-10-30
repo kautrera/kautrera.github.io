@@ -44,9 +44,9 @@ wall.sort((a, b) => rank(a) - rank(b));
 
 // Current projects, placeholders until case studies exist. Add `image` and `id` to link one.
 const current = [
-  { id: 'custom-apps', title: 'Custom Apps', image: '/images/custom-apps.webp' },
+  { id: 'custom-apps', title: 'Custom Merchant Apps', image: '/images/custom-apps.webp' },
   { id: 'bm-ux-studio', title: 'BM UX Studio', image: '/images/bm-ux-studio.webp' },
-  { id: 'commerce-d2c', title: 'Commerce D2C', year: 2022, image: '/images/d2c-dashboard.webp' },
+  { id: 'commerce-d2c', title: 'Commerce for SMB', year: 2022, image: '/images/d2c-thumb.webp' },
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
 ].map((c, i) => ({ tone: i % 4, ...(typeof c === 'string' ? { title: c } : c) }));
 

@@ -1,5 +1,5 @@
 ---
-title: "Salesforce D2C Commerce"
+title: "Commerce for SMB"
 date: 2022-06-01
 year: 2022
 draft: false

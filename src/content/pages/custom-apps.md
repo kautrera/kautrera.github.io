@@ -1,5 +1,5 @@
 ---
-title: "Custom Apps"
+title: "Custom Merchant Apps"
 date: 2026-06-01
 draft: false
 subtitle: "Enterprise Software, Your Way"
@@ -17,6 +17,6 @@ gallery:
   - /images/ca-app.webp
 ---
 
-# Custom Apps
+# Custom Merchant Apps
 
 ### Led the UX vision for a customizable Business Manager framework.
