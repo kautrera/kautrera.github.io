@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar', 'ello', 'blue-coat', 'photobucket', 'palette'];
+const hidden = ['about', 'contact', 'consulting', 'custom-apps', 'truecar', 'ello', 'blue-coat', 'photobucket', 'palette', 'commerce-d2c'];
 // Email is shipped base64-encoded and assembled in the browser, so scrapers reading raw HTML never see it.
 const emailToken = Buffer.from('karen.utera@gmail.com').toString('base64');
 // Wall position keeps an older project's former date, so changing a shown year doesn't reshuffle the wall.
@@ -46,7 +46,7 @@ wall.sort((a, b) => rank(a) - rank(b));
 const current = [
   { id: 'custom-apps', title: 'Custom Apps', image: '/images/custom-apps.webp' },
   { id: 'bm-ux-studio', title: 'BM UX Studio', image: '/images/bm-ux-studio.webp' },
-  { title: 'Commerce D2C', year: 2022 },
+  { id: 'commerce-d2c', title: 'Commerce D2C', year: 2022, image: '/images/d2c-dashboard.webp' },
   { id: 'commerce-studio', title: 'Commerce Studio', image: '/images/commerce-studio-login.webp' },
 ].map((c, i) => ({ tone: i % 4, ...(typeof c === 'string' ? { title: c } : c) }));
 

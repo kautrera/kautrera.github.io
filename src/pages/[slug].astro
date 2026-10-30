@@ -6,6 +6,7 @@ import CustomAppsCase from '../components/CustomAppsCase.astro';
 import TrueCarCase from '../components/TrueCarCase.astro';
 import B2BCase from '../components/B2BCase.astro';
 import PaletteCase from '../components/PaletteCase.astro';
+import D2CCase from '../components/D2CCase.astro';
 import { readFileSync, existsSync } from 'node:fs';
 import '../styles/commerce-case.css';
 import '../styles/studio-case.css';
@@ -25,7 +26,7 @@ const { Content } = await render(page);
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const { title, date, role, tools } = page.data;
 // Same order as the wall, so "Next project" walks the tiles left to right.
-const tour = ['palette', 'custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'truecar-1', 'b2b-commerce', 'clippit', 'photobucket', 'ello', 'blue-coat'];
+const tour = ['palette', 'custom-apps', 'roadster-1', 'bm-ux-studio', 'commerce-studio', 'commerce-d2c', 'truecar-1', 'b2b-commerce', 'clippit', 'photobucket', 'ello', 'blue-coat'];
 const at = tour.indexOf(page.id);
 const nextId = at > -1 ? tour[(at + 1) % tour.length] : null;
 const body = page.body ?? '';
@@ -48,7 +49,7 @@ const gallery = gallerySrc.map((g: any) => {
   const item = typeof g === 'string' ? { src: g } : g;
   return { ...item, url: meta ? privateAssets[`${dir}/${item.src}`] : base + item.src };
 });
-const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : page.id === 'b2b-commerce' ? B2BCase : page.id === 'palette' ? PaletteCase : Private ?? null;
+const Custom = page.id === 'roadster-1' ? RoadsterCase : page.id === 'custom-apps' ? CustomAppsCase : page.id === 'truecar-1' ? TrueCarCase : page.id === 'b2b-commerce' ? B2BCase : page.id === 'palette' ? PaletteCase : page.id === 'commerce-d2c' ? D2CCase : Private ?? null;
 const rawFacts = meta?.facts ?? page.data.facts;
 const facts = rawFacts && !rawFacts.some((f: any) => /^year$/i.test(f.label)) ? [...rawFacts, { label: 'Year', value: String(page.data.year ?? date.getFullYear()) }] : rawFacts;
 const hasCase = gated || !!Custom || body.replace(/!\[[^\]]*\]\([^)]*\)/g, '').trim().length > 400;
